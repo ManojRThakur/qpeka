@@ -1,0 +1,69 @@
+/**
+*
+* DataBase schema for the backend bookstore
+* 
+**/
+books
+{
+	"_id" : "12345677",
+	"title" : "Harry Potter",
+	"authorId" : "13254",
+	"coverPageFile" : "/tmp/file/img.jpg",
+	"edition" : "1",
+	"category" : "Fiction",
+	"numPages" : "200",
+	"publisherId" : "1345",
+	"rating" : "3",
+	"metaData" : "",
+	"comments" : [{
+		commentText : "bla bla...",
+		commenter : "321", 
+		timeOfComment : "123123124124"
+		}.......],
+	"ratings" : [{
+		userId : "123",
+		rating : "3" 
+		}....]
+}
+
+authors
+{
+	_id : "",
+	name : {
+		firstName : "manoj",
+		middleName : "R"
+		lastName : "thakur"	
+	},	
+	gender : M,
+	dob : 12321312,
+	nationality : "Indian",
+	imageFile : "/tmp/img3.jpg",
+	shortBio : "jrcbkuhgr grlfgruflrgflrgfk, gfkjsdgf,sjdg flksjagf",
+	infoLink : "http://google.com",
+	genre : "Fiction"
+
+}
+
+user
+{
+	_id : "",
+	name : {
+		firstName : "manoj",
+		middleName : "R"
+		lastName : "thakur"	
+	},
+	gender : M ,
+	email : {
+		emailid1 : e1@gmail.com,
+		emailid2 : e2@gmail.com,
+		emailid3 : e3@gmail.com,
+	}
+	address : "something something"
+	preferences : [fiction , scifi , comedy]
+	userType : premium,
+	bookmarks :{
+		bookId : "123123",
+		pages : [12,32,34,45,54,32]
+	}
+
+}
