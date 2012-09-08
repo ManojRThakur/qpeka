@@ -1,7 +1,10 @@
 package com.qpeka.test;
 
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -23,38 +26,51 @@ public class TestBooks {
  
 			// get database from MongoDB,
 			// if database doesn't exists, mongoDB will create it automatically
-			DB db = mongo.getDB("bookStore");
+			DB db = mongo.getDB("testStore");
  
 			// Get collection from MongoDB, database named "yourDB"
 			// if collection doesn't exists, mongoDB will create it automatically
-			DBCollection collection = db.getCollection("books");
+			DBCollection collection = db.getCollection("test");
  
 			// create a document to store key and value
 			BasicDBObject document = new BasicDBObject();
-			document.put("_id",12345678);
+			document.put("_id",1234567890);
 			document.put("title","Harry Potter_0");
-			document.put("authorId","13254");
-			document.put("coverPageFile","/tmp/file/img_0.jpg");
-			document.put("edition","1");
-			document.put("category","Fiction");
-			document.put("numPages","200");
-			document.put("publisherId","1345");
-			document.put("rating","3");
-			document.put("metaData","");
+			
+			Set<BasicDBObject> op = new HashSet<BasicDBObject>();
+			
+			BasicDBObject testdb = new BasicDBObject();
+			testdb.put("name", "manoj");
+			
+			BasicDBObject testdb1 = new BasicDBObject();
+			testdb1.put("name", "manoj1");
+			op.add(testdb1);
+			op.add(testdb);
+			
+			document.put("testName",op);
+			
 			// save it into collection named "yourCollection"
 			//collection.insert(document);
  
 			// search query
 			BasicDBObject searchQuery = new BasicDBObject();
-			searchQuery.put("_id", 12345678);
+			searchQuery.put("_id", 1234567890);
  
 			// query it
 			DBCursor cursor = collection.find(searchQuery);
  
 			// loop over the cursor and display the retrieved result
 			while (cursor.hasNext()) {
-				System.out.println(cursor.next());
+				BasicDBObject o = (BasicDBObject)cursor.next();
+			
+				System.out.println(o);
+				
+				long test1 = o.getLong("_id");
+				String title = o.getString("title");
+				BasicDBList n = (BasicDBList) o.get("testName");
+				System.out.println(n);
 			}
+			
  
 			System.out.println("Done");
  

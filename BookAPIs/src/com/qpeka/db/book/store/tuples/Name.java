@@ -1,5 +1,8 @@
 package com.qpeka.db.book.store.tuples;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 /*
  * name : {
 				firstName : "manoj",
@@ -9,6 +12,10 @@ package com.qpeka.db.book.store.tuples;
  * 
  */
 public class Name {
+	
+	public static final String FIRSTNAME = "firstName";
+	public static final String MIDDLENAME = "middleName";
+	public static final String LASTNAME = "lastName";
 	
 	private String firstName ;
 	private String middleName ;
@@ -44,6 +51,19 @@ public class Name {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-		
 	
+	public DBObject toDBObject()
+	{
+		BasicDBObject dbObj = new BasicDBObject();
+		dbObj.put(FIRSTNAME, firstName);
+		dbObj.put(MIDDLENAME, middleName);
+		dbObj.put(LASTNAME, lastName);
+		
+		return dbObj;
+	}
+	
+	public static Name getNamefromDBObject(BasicDBObject obj)
+	{
+		return new Name(obj.getString(FIRSTNAME), obj.getString(MIDDLENAME),obj.getString(LASTNAME));
+	}
 }

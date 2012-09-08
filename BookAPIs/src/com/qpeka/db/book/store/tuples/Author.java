@@ -1,9 +1,12 @@
 package com.qpeka.db.book.store.tuples;
 
 import java.util.Date;
-import java.util.List;
 
-import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
 
 /*
@@ -29,6 +32,16 @@ import com.qpeka.db.book.store.tuples.Constants.GENDER;
  */
 
 public class Author {
+
+	public static final String ID = "_id";
+	public static final String NAME = "name";
+	public static final String GENDER = "gender";
+	public static final String DOB = "dob";
+	public static final String NATIONALITY = "nationality";
+	public static final String IMAGEFILE = "imageFile";
+	public static final String SHORTBIO = "shortBio";
+	public static final String INFOLINK = "infoLink";
+	public static final String GENRE = "genre";
 	
 	private long _id ;
 	private Name name;
@@ -38,7 +51,7 @@ public class Author {
 	private String imageFile;
 	private String shortBio;
 	private String infoLink;
-	private List<CATEGORY> genre;
+	private JSONArray genre;
 	
 	public Author() {
 		super();
@@ -46,7 +59,7 @@ public class Author {
 	
 	public Author(long _id, Name name, GENDER gender, Date dob,
 			String nationality, String imageFile, String shortBio,
-			String infoLink, List<CATEGORY> genre) {
+			String infoLink, JSONArray genre) {
 		super();
 		this._id = _id;
 		this.name = name;
@@ -106,12 +119,43 @@ public class Author {
 	public void setInfoLink(String infoLink) {
 		this.infoLink = infoLink;
 	}
-	public List<CATEGORY> getGenre() {
+	public JSONArray getGenre() {
 		return genre;
 	}
-	public void setGenre(List<CATEGORY> genre) {
+	public void setGenre(JSONArray genre) {
 		this.genre = genre;
 	}
 	
+	public DBObject toDBObject()
+	{
+		BasicDBObject dbObj = new BasicDBObject();
+		dbObj.put(ID, _id);
+		dbObj.put(NAME, name.toDBObject());
+		dbObj.put(GENDER, gender);
+		dbObj.put(DOB, dob.getTime());
+		dbObj.put(NATIONALITY, nationality);
+		dbObj.put(IMAGEFILE, imageFile);
+		dbObj.put(SHORTBIO, shortBio);
+		dbObj.put(INFOLINK, infoLink);
+		dbObj.put(GENRE, genre.toString());
+		
+		return dbObj;
+	}
+	
+	public static Author getAuthorfromDBObject(BasicDBObject obj)
+	{
+		JSONArray genre = new JSONArray();
+		try 
+		{
+			genre = new JSONArray(obj.getString(GENRE));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return new Author(obj.getLong(ID), Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)), com.qpeka.db.book.store.tuples.Constants.GENDER.valueOf(obj.getString(GENDER)),
+				new Date(obj.getLong(DOB)), obj.getString(NATIONALITY) , obj.getString(IMAGEFILE), obj.getString(SHORTBIO),obj.getString(INFOLINK),
+				genre);
+	}
 	
 }

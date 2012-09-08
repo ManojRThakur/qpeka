@@ -1,10 +1,17 @@
 package com.qpeka.db.book.store.tuples;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 public class UserInfoIdentifier 
 {
 	private long _id;
 	private String userName;
 	private Name name;
+	
+	public static final String ID = "_id";
+	public static final String USERNAME = "userName";
+	public static final String NAME = "name";
 	
 	public UserInfoIdentifier()
 	{
@@ -37,4 +44,17 @@ public class UserInfoIdentifier
 		this.name = name;
 	}
 	
+	public DBObject toDBObject()
+	{
+		BasicDBObject dbObj = new BasicDBObject();
+		dbObj.put(ID, _id);
+		dbObj.put(NAME, name);
+		dbObj.put(USERNAME, userName);
+		
+		return dbObj;
+	}
+	public static UserInfoIdentifier getUserInfoIdentifierfromDBObject(BasicDBObject obj)
+	{
+		return new UserInfoIdentifier(obj.getLong(ID), obj.getString(USERNAME),Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)));
+	}
 }

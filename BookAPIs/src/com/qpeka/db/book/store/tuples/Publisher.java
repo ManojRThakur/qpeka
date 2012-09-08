@@ -1,7 +1,13 @@
 package com.qpeka.db.book.store.tuples;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 public class Publisher {
 
+	public static final String NAME = "name";
+	public static final String ID = "_id";
+	
 	private String name;
 	private long _id;
 	
@@ -29,5 +35,17 @@ public class Publisher {
 		this._id = _id;
 	}
 	
+	public DBObject toDBObject()
+	{
+		BasicDBObject dbObj = new BasicDBObject();
+		dbObj.put(NAME, name);
+		dbObj.put(ID, _id);
+		
+		return dbObj;
+	}
 	
+	public static Publisher getPublisherfromDBObject(BasicDBObject obj)
+	{
+		return new Publisher(obj.getString(NAME), obj.getLong(ID));
+	}
 }
