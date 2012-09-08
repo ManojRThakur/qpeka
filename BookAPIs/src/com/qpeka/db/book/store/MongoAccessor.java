@@ -1,5 +1,7 @@
 package com.qpeka.db.book.store;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -38,6 +40,7 @@ public class MongoAccessor
 		try
 		{
 			props.load(MongoAccessor.class.getClassLoader().getResourceAsStream("mongo.properties"));
+			//props.load(new FileInputStream(new File("/home/manoj/QPEKA/qpeka/BookAPIs/conf/mongo.properties")));
 			host = props.getProperty("host");
 			port = Integer.parseInt(props.getProperty("port"));
 			json = new JSONObject(props.getProperty("connectionOptions"));

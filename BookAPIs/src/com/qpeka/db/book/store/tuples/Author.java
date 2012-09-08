@@ -43,7 +43,7 @@ public class Author {
 	public static final String INFOLINK = "infoLink";
 	public static final String GENRE = "genre";
 	
-	private long _id ;
+	private String _id ;
 	private Name name;
 	private GENDER gender;
 	private Date dob;
@@ -57,7 +57,7 @@ public class Author {
 		super();
 	}
 	
-	public Author(long _id, Name name, GENDER gender, Date dob,
+	public Author(String _id, Name name, GENDER gender, Date dob,
 			String nationality, String imageFile, String shortBio,
 			String infoLink, JSONArray genre) {
 		super();
@@ -71,10 +71,10 @@ public class Author {
 		this.infoLink = infoLink;
 		this.genre = genre;
 	}
-	public long get_id() {
+	public String get_id() {
 		return _id;
 	}
-	public void set_id(long _id) {
+	public void set_id(String _id) {
 		this._id = _id;
 	}
 	public Name getName() {
@@ -126,12 +126,14 @@ public class Author {
 		this.genre = genre;
 	}
 	
-	public DBObject toDBObject()
+	public DBObject toDBObject(boolean insert)
 	{
 		BasicDBObject dbObj = new BasicDBObject();
-		dbObj.put(ID, _id);
+		if(!insert)
+			dbObj.put(ID, _id);
+		
 		dbObj.put(NAME, name.toDBObject());
-		dbObj.put(GENDER, gender);
+		dbObj.put(GENDER, gender.toString());
 		dbObj.put(DOB, dob.getTime());
 		dbObj.put(NATIONALITY, nationality);
 		dbObj.put(IMAGEFILE, imageFile);
@@ -153,7 +155,7 @@ public class Author {
 			e.printStackTrace();
 		}
 		
-		return new Author(obj.getLong(ID), Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)), com.qpeka.db.book.store.tuples.Constants.GENDER.valueOf(obj.getString(GENDER)),
+		return new Author(obj.getString(ID), Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)), com.qpeka.db.book.store.tuples.Constants.GENDER.valueOf(obj.getString(GENDER)),
 				new Date(obj.getLong(DOB)), obj.getString(NATIONALITY) , obj.getString(IMAGEFILE), obj.getString(SHORTBIO),obj.getString(INFOLINK),
 				genre);
 	}

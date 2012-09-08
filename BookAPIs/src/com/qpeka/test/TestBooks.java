@@ -30,11 +30,11 @@ public class TestBooks {
  
 			// Get collection from MongoDB, database named "yourDB"
 			// if collection doesn't exists, mongoDB will create it automatically
-			DBCollection collection = db.getCollection("test");
+			DBCollection collection = db.getCollection("test1");
  
 			// create a document to store key and value
 			BasicDBObject document = new BasicDBObject();
-			document.put("_id",1234567890);
+			//document.put("_id",1234567890);
 			document.put("title","Harry Potter_0");
 			
 			Set<BasicDBObject> op = new HashSet<BasicDBObject>();
@@ -50,7 +50,7 @@ public class TestBooks {
 			document.put("testName",op);
 			
 			// save it into collection named "yourCollection"
-			//collection.insert(document);
+			collection.insert(document);
  
 			// search query
 			BasicDBObject searchQuery = new BasicDBObject();

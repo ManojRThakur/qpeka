@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<project name="BookAPI" default="all" basedir=".">
+	<property name="src.dir" value="." />
+	<property name="lib.dir" value="lib" />
+
+	<property name="build.dir" value="build" />
+	<property name="build.classes" value="${build.dir}/classes" />
+	<property name="build.lib" value="lib" />
+	
+	<property name="build.properties" value="properties" />
+	<property name="war.name" value="BookAPI" />
+
+	<property name="debug.flag" value="on" />
+
+	<filelist id="dependent-jars" dir="${lib.dir}">
+		<file name="log4j/log4j-1.2.15.jar" />
+		<file name="servlet/javax.servlet.jar" />
+		<file name="json/json.jar" />
+		<file name="mongodb/mongo-2.8.0.jar" />
+		<file name="servlet/javax.servlet.jsp.jar" />
+	</filelist>
+
+
+	<target name="prepare">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes}" />
+	</target>
+
+	<target name="clean" description="Removes all generated files">
+		<delete file="lib/${war.name}.war" />
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile" depends="prepare" description="compiles the whole source code">
+		<javac destdir="${build.classes}" debug="${debug.flag}" deprecation="on">
+			<src path="${src.dir}" />
+			<exclude name="" />
+			<classpath>
+				<pathelement location="." />
+				<pathelement location="${lib.dir}/log4j/log4j-1.2.15.jar" />
+				<pathelement location="${lib.dir}/servlet/javax.servlet.jar" />
+				<pathelement location="${lib.dir}/json/json.jar" />
+				<pathelement location="${lib.dir}/mongodb/mongo-2.8.0.jar" />
+				<pathelement location="${lib.dir}/servlet/javax.servlet.jsp.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates OBDialer.jar in the dist directory">
+		<jar jarfile="${build.lib}/BookAPI.jar" basedir="${build.classes}" />
+		<copy file="${build.lib}/BookAPI.jar" todir="${lib.dir}" />
+	</target>
+
+	<target name="bookapi-war" depends="jar" description="Compiles and creates the deployable war for RemoteMap">
+		<war destfile="${lib.dir}/${war.name}.war" webxml="conf/web.xml">
+			<lib dir="${build.lib}" />
+			<classes dir="${build.classes}" includes="com/**" />
+			<classes dir="conf" includes="*.properties" />
+		</war>
+	</target>
+	<target name="all" depends="clean,jar,bookapi-war" description="Cleans, compiles and then builds the JAR file">
+	</target>
+</project>

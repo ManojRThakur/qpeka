@@ -48,7 +48,7 @@ public class UserInfoIdentifier
 	{
 		BasicDBObject dbObj = new BasicDBObject();
 		dbObj.put(ID, _id);
-		dbObj.put(NAME, name);
+		dbObj.put(NAME, name.toDBObject());
 		dbObj.put(USERNAME, userName);
 		
 		return dbObj;

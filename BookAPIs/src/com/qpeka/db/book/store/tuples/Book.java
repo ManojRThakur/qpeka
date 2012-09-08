@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bson.types.ObjectId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,25 +55,25 @@ public class Book {
 	public static final String COMMENTS ="comments";
 	public static final String RATINGS ="ratings"; 
 	
-	private long _id;
-	private String title;
-	private long authorId;
-	private String coverPageFile;
-	private int edition;
-	private CATEGORY category;
-	private int numPages;
-	private Publisher publisher;
-	private float avgRating;
-	private JSONObject metaData;
-	private List<UserRating> ratings;
-	private List<UserComments> comments;
+	private String _id = "";
+	private String title = "";
+	private String authorId = "";
+	private String coverPageFile = "";
+	private int edition = 0;
+	private CATEGORY category = com.qpeka.db.book.store.tuples.Constants.CATEGORY.FICTION;
+	private int numPages = 0;
+	private Publisher publisher = new Publisher();
+	private float avgRating = 0.0f;
+	private JSONObject metaData = new JSONObject();
+	private List<UserRating> ratings = null;
+	private List<UserComments> comments = null;
 	
 	public Book()
 	{
 		
 	}
 	
-	public Book(long _id, String title, long authorId, String coverPageFile,
+	public Book(String _id, String title, String authorId, String coverPageFile,
 			int edition, CATEGORY category, int numPages, Publisher publisher,
 			float avgRating, JSONObject metaData, List<UserRating> ratings,
 			List<UserComments> comments) {
@@ -91,11 +92,11 @@ public class Book {
 		this.comments = comments;
 	}
 	
-	public long get_id() {
+	public String get_id() {
 		return _id;
 	}
 
-	public void set_id(long _id) {
+	public void set_id(String _id) {
 		this._id = _id;
 	}
 
@@ -107,11 +108,11 @@ public class Book {
 		this.title = title;
 	}
 
-	public long getAuthorId() {
+	public String getAuthorId() {
 		return authorId;
 	}
 
-	public void setAuthorId(long authorId) {
+	public void setAuthorId(String authorId) {
 		this.authorId = authorId;
 	}
 
@@ -187,17 +188,19 @@ public class Book {
 		this.comments = comments;
 	}
 	
-	public DBObject toDBObject()
+	public DBObject toDBObject(boolean insert)
 	{
 		BasicDBObject dbObj = new BasicDBObject();
-		dbObj.put(ID, _id);
+		if(!insert)
+			dbObj.put(ID, _id);
+		
 		dbObj.put(TITLE, title);
-		dbObj.put(AUTHORID, authorId);
+		dbObj.put(AUTHORID, new ObjectId(authorId));
 		dbObj.put(COVERPAGEFILE, coverPageFile);
 		dbObj.put(EDITION, edition);
-		dbObj.put(CATEGORY, category);
+		dbObj.put(CATEGORY, category.toString());
 		dbObj.put(NUMPAGES, numPages);
-		dbObj.put(PUBLISHER, publisher);
+		dbObj.put(PUBLISHER, publisher.toDBObject());
 		dbObj.put(RATING, avgRating);
 		dbObj.put(METADATA, metaData.toString());
 		Set<BasicDBObject> commentsSet = new HashSet<BasicDBObject>();
@@ -210,9 +213,9 @@ public class Book {
 		Set<BasicDBObject> ratingSet = new HashSet<BasicDBObject>();
 		for(UserRating rating : ratings)
 		{
-			commentsSet.add((BasicDBObject)rating.toDBObject());
+			ratingSet.add((BasicDBObject)rating.toDBObject());
 		}
-		dbObj.put(RATING, ratingSet);
+		dbObj.put(RATINGS, ratingSet);
 		
 		return dbObj;
 	}
@@ -236,7 +239,7 @@ public class Book {
 		}
 		
 		try {
-			return new  Book(obj.getLong(ID), obj.getString(TITLE), obj.getLong(AUTHORID), obj.getString(COVERPAGEFILE), obj.getInt(EDITION), com.qpeka.db.book.store.tuples.Constants.CATEGORY.valueOf(obj.getString(CATEGORY)),
+			return new  Book(obj.getString(ID), obj.getString(TITLE), obj.getString(AUTHORID), obj.getString(COVERPAGEFILE), obj.getInt(EDITION), com.qpeka.db.book.store.tuples.Constants.CATEGORY.valueOf(obj.getString(CATEGORY)),
 					obj.getInt(NUMPAGES), Publisher.getPublisherfromDBObject((BasicDBObject)obj.get(PUBLISHER)), (float)obj.getDouble(RATING), new JSONObject(obj.getString(METADATA)), userRatings, userComments);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
