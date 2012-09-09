@@ -192,7 +192,7 @@ public class Book {
 	{
 		BasicDBObject dbObj = new BasicDBObject();
 		if(!insert)
-			dbObj.put(ID, _id);
+			dbObj.put(ID, new ObjectId(_id));
 		
 		dbObj.put(TITLE, title);
 		dbObj.put(AUTHORID, new ObjectId(authorId));

@@ -12,4 +12,9 @@ public class Constants {
 		FICTION, SUSPENSE
 	}
 	
+	public enum USERTYPE
+	{
+		PREMIUM , FREE
+	}
+	
 }
