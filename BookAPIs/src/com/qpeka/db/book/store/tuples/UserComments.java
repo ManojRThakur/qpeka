@@ -9,7 +9,6 @@ public class UserComments {
 	public static final String COMMENT = "comment";
 	public static final String USERINFO = "userInfo";
 	
-	private long _id;
 	private String comment;
 	private UserInfoIdentifier userInfo;
 	
@@ -18,19 +17,10 @@ public class UserComments {
 		
 	}
 	
-	public UserComments(long id , String comment, UserInfoIdentifier userInfo) {
+	public UserComments(String comment, UserInfoIdentifier userInfo) {
 		super();
-		this._id = id;
 		this.comment = comment;
 		this.userInfo = userInfo;
-	}
-	
-	public long get_id() {
-		return _id;
-	}
-
-	public void set_id(long _id) {
-		this._id = _id;
 	}
 
 	public String getComment() {
@@ -49,7 +39,6 @@ public class UserComments {
 	public DBObject toDBObject()
 	{
 		BasicDBObject dbObj = new BasicDBObject();
-		dbObj.put(ID, _id);
 		dbObj.put(COMMENT, comment);
 		dbObj.put(USERINFO, userInfo.toDBObject());
 		
@@ -58,7 +47,7 @@ public class UserComments {
 	
 	public static UserComments getUserCommentfromDBObject(BasicDBObject obj)
 	{
-		return new UserComments(obj.getLong(ID), obj.getString(COMMENT) ,UserInfoIdentifier.getUserInfoIdentifierfromDBObject((BasicDBObject)obj.get(USERINFO)));
+		return new UserComments(obj.getString(COMMENT) ,UserInfoIdentifier.getUserInfoIdentifierfromDBObject((BasicDBObject)obj.get(USERINFO)));
 	}
 	
 }

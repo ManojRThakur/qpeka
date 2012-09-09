@@ -64,6 +64,58 @@ public class BookHandler {
 		books.update(q, new BasicDBObject("$set" , book.toDBObject(true)), true, false, WriteConcern.SAFE);
 	}
 	
+	public void addBookComment(String id, UserComments comment)
+	{
+		BasicDBObject bdObj = (BasicDBObject)comment.toDBObject();
+		BasicDBObject q = new BasicDBObject();
+		q.put("_id", new ObjectId(id));
+		
+		books.update(q, new BasicDBObject("$push", new BasicDBObject("comments", bdObj) ), true, false, WriteConcern.SAFE);
+	}
+	
+	public void addBookRating(String id, UserRating rating)
+	{
+		BasicDBObject bdObj = (BasicDBObject)rating.toDBObject();
+		BasicDBObject q = new BasicDBObject();
+		q.put("_id", new ObjectId(id));
+		
+		if(!doesUserRatingForBookExist(id,rating.getUserInfo().get_id()))
+			books.update(q, new BasicDBObject("$push", new BasicDBObject("ratings", bdObj) ), true, false, WriteConcern.SAFE);
+		else
+		{
+			q.put("ratings.userInfo._id", rating.getUserInfo().get_id());
+			books.update(q, new BasicDBObject( "$set" , new BasicDBObject("ratings.$.rating", rating.getRating())), true, false, WriteConcern.SAFE);
+		}
+	}
+	
+	private boolean doesUserRatingForBookExist(String id , long userId)
+	{
+		BasicDBObject q = new BasicDBObject();
+		q.put("_id", new ObjectId(id));
+		q.put("ratings.userInfo._id", userId);
+		
+		DBCursor cursor = books.find(q);
+		
+		try 
+        {
+            if(cursor.hasNext()) 
+            {
+            	BasicDBObject dObj = (BasicDBObject)cursor.next();
+            	return true;
+            }
+            else
+            	return false;
+        } 
+        catch (Exception e)
+        {
+			e.printStackTrace();
+			return false;
+		}
+        finally {
+            cursor.close();
+        }
+	}
+	
 	public Book getBook(String id)
 	{
 		BasicDBObject q = new BasicDBObject();
@@ -203,17 +255,18 @@ public class BookHandler {
 		ratings.add(new UserRating(0, new UserInfoIdentifier(517, "danger anna6", new Name("manoj6", "rameshchandra", "Thakur"))));
 		
 		List<UserComments> comments = new ArrayList<UserComments>();
-		comments.add(new UserComments(123455, "Hello Comment1", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
-		comments.add(new UserComments(123456, "Hello Comment2", new UserInfoIdentifier(512, "danger anna2", new Name("manoj2", "rameshchandra", "Thakur"))));
-		comments.add(new UserComments(123457, "Hello Comment3", new UserInfoIdentifier(512, "danger anna6", new Name("manoj6", "rameshchandra", "Thakur"))));
-		comments.add(new UserComments(123458, "Hello Comment4", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
-		comments.add(new UserComments(123459, "Hello Comment5", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
-		
+		comments.add(new UserComments("Hello Comment1", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
+		comments.add(new UserComments("Hello Comment2", new UserInfoIdentifier(512, "danger anna2", new Name("manoj2", "rameshchandra", "Thakur"))));
+//		comments.add(new UserComments(123457, "Hello Comment3", new UserInfoIdentifier(512, "danger anna6", new Name("manoj6", "rameshchandra", "Thakur"))));
+//		comments.add(new UserComments(123458, "Hello Comment4", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
+//		comments.add(new UserComments(123459, "Hello Comment5", new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));
+//		
 		book.setRatings(ratings);
 		book.setComments(comments);
 		
-		String id = BookHandler.getInstance().addBook(book);
-		System.out.println(id);
+		//String x = BookHandler.getInstance().addBook(book);
+		BookHandler.getInstance().addBookRating("504c83b6364509aed091c801", new UserRating(300, new UserInfoIdentifier(516, "danger anna4", new Name("manoj4", "rameshchandra", "Thakur"))));
+		
 		
 		//System.out.println(BookHandler.getInstance().getBookByAuthorId("504b7a67e0c1b0da3bcafc16"));
 	}
