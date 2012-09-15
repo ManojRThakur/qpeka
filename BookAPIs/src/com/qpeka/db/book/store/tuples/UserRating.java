@@ -6,47 +6,68 @@ import com.mongodb.DBObject;
 public class UserRating {
 	
 	public static final String RATING = "rating";
-	public static final String USERINFO = "userInfo";
+	public static final String USERID = "userId";
+	public static final String BOOKID = "bookId";
 	
+	private String userId = "";
+	private String bookId = "";
 	private int rating; //out of ten
-	private UserInfoIdentifier userInfo;
-	
+
 	public UserRating()
 	{
 		
 	}
 	
-	public UserRating(int rating, UserInfoIdentifier userInfo) {
+	public UserRating(String userId, String bookId, int rating) {
 		super();
+		this.userId = userId;
+		this.bookId = bookId;
 		this.rating = rating;
-		this.userInfo = userInfo;
 	}
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
+	public String getBookId() {
+		return bookId;
+	}
+
+
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
+	}
+
+
 	public int getRating() {
 		return rating;
 	}
+
+
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
-	public UserInfoIdentifier getUserInfo() {
-		return userInfo;
-	}
-	public void setUserInfo(UserInfoIdentifier userInfo) {
-		this.userInfo = userInfo;
-	}
-	
+
+
 	public DBObject toDBObject()
 	{
 		BasicDBObject dbObj = new BasicDBObject();
 		
 		dbObj.put(RATING, rating);
-		dbObj.put(USERINFO, userInfo.toDBObject());
+		dbObj.put(USERID, userId);
+		dbObj.put(BOOKID, bookId);
 		
 		return dbObj;
 	}
 	
 	public static UserRating getUserRatingfromDBObject(BasicDBObject obj)
 	{
-		return new UserRating(obj.getInt(RATING), UserInfoIdentifier.getUserInfoIdentifierfromDBObject((BasicDBObject)obj.get(USERINFO)));
+		return new UserRating(obj.getString(USERID), obj.getString(BOOKID), obj.getInt(RATING));
 	}
 }

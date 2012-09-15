@@ -1,10 +1,13 @@
 package com.qpeka.db.book.store;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -13,8 +16,8 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.tuples.Author;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
-import com.qpeka.db.book.store.tuples.Name;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
+import com.qpeka.db.book.store.tuples.Name;
 
 
 public class AuthorHandler {
@@ -81,6 +84,44 @@ public class AuthorHandler {
 
 	}
 	
+	
+	public List<Author> getAuthorsByLikelyName(String query)
+	{
+		List<Author> listToReturn = new ArrayList<Author>();
+		
+		BasicDBList list = new BasicDBList();
+		list.add(new BasicDBObject(Author.NAME+"."+Name.FIRSTNAME, "/"+query+"/"));
+		list.add(new BasicDBObject(Author.NAME+"."+Name.MIDDLENAME, "/"+query+"/"));
+		list.add(new BasicDBObject(Author.NAME+"."+Name.LASTNAME, "/"+query+"/"));
+		
+		BasicDBObject q = new BasicDBObject();
+		q.put("$or", list);
+		
+		
+		DBCursor cursor = authors.find(q);
+		
+        try 
+        {
+            while(cursor.hasNext()) 
+            {
+                BasicDBObject dObj = (BasicDBObject)cursor.next();
+                Author author = Author.getAuthorfromDBObject(dObj);
+                listToReturn.add(author);
+            
+            }
+           
+            return listToReturn;
+        } 
+        catch (Exception e)
+        {
+			e.printStackTrace();
+			return listToReturn;
+		}
+        finally {
+            cursor.close();
+        }
+
+	}
 	public static void main(String[] args) {
 		
 		Author a = new Author();
