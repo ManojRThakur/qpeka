@@ -18,6 +18,7 @@ import com.qpeka.db.book.store.tuples.Author;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
 import com.qpeka.db.book.store.tuples.Name;
+import com.qpeka.db.book.store.tuples.Publisher;
 
 
 public class AuthorHandler {
@@ -124,19 +125,31 @@ public class AuthorHandler {
 	}
 	public static void main(String[] args) {
 		
-		Author a = new Author();
-		a.setName(new Name("manoj", "ramesh", "thakur"));
-		a.setDob(new Date());
-		a.setGender(GENDER.MALE);
-		a.setInfoLink("http://google.com");
-		a.setImageFile("/tmp/img.jpg");
-		JSONArray j = new JSONArray();
-		j.put(CATEGORY.FICTION);
-		j.put(CATEGORY.SUSPENSE);
-		a.setGenre(j);
-		a.setShortBio("ehgwkgdedhgwljkdghe");
+		/*Author a = null;
 		
-		AuthorHandler.getInstance().getAuthor("504b8430e0c11d217f13a39a");
+		for(int i = 0 ;i < 50 ; i ++)
+		{
+			a= new Author();
+			a.setName(new Name("manoj"+ i, "ramesh" +i, "thakur" + i));
+			a.setDob(new Date());
+			a.setGender(GENDER.MALE);
+			a.setInfoLink("http://google.com"+i);
+			a.setImageFile("/tmp/img"+i+".jpg");
+			JSONArray j = new JSONArray();
+			j.put(CATEGORY.FICTION);
+			j.put(CATEGORY.SUSPENSE);
+			a.setGenre(j);
+			a.setShortBio("BIO "+i);
+			
+			AuthorHandler.getInstance().addAuthor(a);
+		}*/
+		
+		for(int i = 0;i<10;i++)
+		{
+			PublisherHandler.getInstance().addPublisher(new Publisher("TMH " + i, ""));
+		}
+		
+		
 		
 		
 	}

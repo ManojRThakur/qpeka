@@ -9,7 +9,7 @@ public class Constants {
 	
 	public enum CATEGORY
 	{
-		FICTION, SUSPENSE
+		FICTION, SUSPENSE , LOVE, COMEDY
 	}
 	
 	public enum USERTYPE

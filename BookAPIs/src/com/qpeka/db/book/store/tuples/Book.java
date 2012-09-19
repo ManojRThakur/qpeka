@@ -43,7 +43,7 @@ public class Book {
 	public static final String EDITION ="edition";
 	public static final String CATEGORY ="category";
 	public static final String NUMPAGES ="numPages,";
-	public static final String PUBLISHER ="publisher";
+	public static final String PUBLISHERID ="publisherId";
 	public static final String RATING ="avgRating";
 	public static final String METADATA ="metaData";
 	public static final String COMMENTS ="comments";
@@ -59,7 +59,7 @@ public class Book {
 	private int edition = 0;
 	private CATEGORY category = com.qpeka.db.book.store.tuples.Constants.CATEGORY.FICTION;
 	private int numPages = 0;
-	private Publisher publisher = new Publisher();
+	private String publisherId = "";
 	private float avgRating = 0.0f;
 	private JSONObject metaData = new JSONObject();
 	private String description = "";
@@ -72,7 +72,7 @@ public class Book {
 	public Book(String _id, String title, String authorId,
 			String coverPageFile, int edition,
 			com.qpeka.db.book.store.tuples.Constants.CATEGORY category,
-			int numPages, Publisher publisher, float avgRating,
+			int numPages, String publisherId, float avgRating,
 			JSONObject metaData, String description) {
 		super();
 		this._id = _id;
@@ -82,7 +82,7 @@ public class Book {
 		this.edition = edition;
 		this.category = category;
 		this.numPages = numPages;
-		this.publisher = publisher;
+		this.publisherId = publisherId;
 		this.avgRating = avgRating;
 		this.metaData = metaData;
 		this.description = description;
@@ -152,12 +152,12 @@ public class Book {
 		this.numPages = numPages;
 	}
 
-	public Publisher getPublisher() {
-		return publisher;
+	public String getPublisher() {
+		return publisherId;
 	}
 
-	public void setPublisher(Publisher publisher) {
-		this.publisher = publisher;
+	public void setPublisher(String publisher) {
+		this.publisherId = publisher;
 	}
 
 	public float getAvgRating() {
@@ -188,7 +188,7 @@ public class Book {
 		dbObj.put(EDITION, edition);
 		dbObj.put(CATEGORY, category.toString());
 		dbObj.put(NUMPAGES, numPages);
-		dbObj.put(PUBLISHER, publisher.toDBObject());
+		dbObj.put(PUBLISHERID, publisherId);
 		dbObj.put(RATING, avgRating);
 		dbObj.put(DESCRIPTION, description);
 		dbObj.put(METADATA, metaData.toString());
@@ -200,7 +200,7 @@ public class Book {
 	{
 		try {
 			return new  Book(obj.getString(ID), obj.getString(TITLE), obj.getString(AUTHORID), obj.getString(COVERPAGEFILE), obj.getInt(EDITION), com.qpeka.db.book.store.tuples.Constants.CATEGORY.valueOf(obj.getString(CATEGORY)),
-					obj.getInt(NUMPAGES), Publisher.getPublisherfromDBObject((BasicDBObject)obj.get(PUBLISHER)), (float)obj.getDouble(RATING), new JSONObject(obj.getString(METADATA)), obj.getString(DESCRIPTION));
+					obj.getInt(NUMPAGES), obj.getString(PUBLISHERID), (float)obj.getDouble(RATING), new JSONObject(obj.getString(METADATA)), obj.getString(DESCRIPTION));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

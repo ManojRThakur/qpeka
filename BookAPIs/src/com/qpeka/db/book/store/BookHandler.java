@@ -15,6 +15,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.tuples.Book;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
+import com.qpeka.db.book.store.tuples.Publisher;
 
 /*
  * 1) Primary key testing
@@ -328,16 +329,28 @@ public class BookHandler {
 	
 	
 	public static void main(String[] args) {
-//		Book book = new Book();
-//		book.set_id("");
-//		book.setTitle("Harry Potter");
-//		book.setAuthorId("504b7a67e0c1b0da3bcafc16");
-//		book.setEdition(1);
-//		book.setCoverPageFile("/tmp/img.jpg");
-//		book.setNumPages(200);
-//		book.setPublisher(new Publisher("TMH" , 12312321));
-//		book.setAvgRating(3.6f);
-//		book.setCategory(CATEGORY.FICTION);
+		
+		String[] titles = {"Harry Potter" , "Pride & Prejudice" , "Gone with the wind"};
+		String[] authorIds = {"5055fa47c4e7aaf93796c90a" , "5055fa47c4e7aaf93796c90d" , "5055fa47c4e7aaf93796c90f" , "5055fa47c4e7aaf93796c907" , "5055fa47c4e7aaf93796c906"};
+		String[] publisherIds = {"50560049c4e7a9cad3686ed1","50560049c4e7a9cad3686ed4","50560049c4e7a9cad3686ed6"};
+		
+		Book book = null;
+		for(int i = 0; i<20;i++)
+		{
+			book = new Book();
+			book.set_id("");
+			book.setTitle(titles[i%titles.length]);
+			book.setAuthorId(authorIds[i%authorIds.length]);
+			book.setEdition(i);
+			book.setCoverPageFile("/tmp/img"+i+".jpg");
+			book.setNumPages(200 + i*10);
+			book.setPublisher(publisherIds[i%publisherIds.length]);
+			book.setAvgRating(3.6f);
+			book.setCategory(CATEGORY.values()[i%CATEGORY.values().length]);
+			
+			BookHandler.getInstance().addBook(book);
+		}
+
 //		
 //		List<UserRating> ratings = new ArrayList<UserRating>();
 //		ratings.add(new UserRating(3, new UserInfoIdentifier(512, "danger anna1", new Name("manoj1", "rameshchandra", "Thakur"))));

@@ -9,14 +9,14 @@ public class Publisher {
 	public static final String ID = "_id";
 	
 	private String name;
-	private long _id;
+	private String _id;
 	
 	public Publisher()
 	{
 		
 	}
 	
-	public Publisher(String name, long _id) {
+	public Publisher(String name, String _id) {
 		super();
 		this.name = name;
 		this._id = _id;
@@ -28,24 +28,27 @@ public class Publisher {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long get_id() {
+	public String get_id() {
 		return _id;
 	}
-	public void set_id(long _id) {
+	public void set_id(String _id) {
 		this._id = _id;
 	}
 	
-	public DBObject toDBObject()
+	public DBObject toDBObject(boolean insert)
 	{
 		BasicDBObject dbObj = new BasicDBObject();
+		if(!insert)
+			dbObj.put(ID, _id);
+		
 		dbObj.put(NAME, name);
-		dbObj.put(ID, _id);
+		
 		
 		return dbObj;
 	}
 	
 	public static Publisher getPublisherfromDBObject(BasicDBObject obj)
 	{
-		return new Publisher(obj.getString(NAME), obj.getLong(ID));
+		return new Publisher(obj.getString(NAME), obj.getString(ID));
 	}
 }
