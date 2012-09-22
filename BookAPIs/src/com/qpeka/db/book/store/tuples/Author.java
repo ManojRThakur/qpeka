@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.qpeka.db.book.store.tuples.Constants.AUTHORTYPE;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
 
 /*
@@ -42,6 +43,7 @@ public class Author {
 	public static final String SHORTBIO = "shortBio";
 	public static final String INFOLINK = "infoLink";
 	public static final String GENRE = "genre";
+	public static final String TYPE = "type";
 	
 	private String _id ;
 	private Name name;
@@ -52,14 +54,16 @@ public class Author {
 	private String shortBio;
 	private String infoLink;
 	private JSONArray genre;
+	private AUTHORTYPE type = AUTHORTYPE.LEVEL1;
 	
 	public Author() {
 		super();
 	}
 	
-	public Author(String _id, Name name, GENDER gender, Date dob,
+	public Author(String _id, Name name,
+			com.qpeka.db.book.store.tuples.Constants.GENDER gender, Date dob,
 			String nationality, String imageFile, String shortBio,
-			String infoLink, JSONArray genre) {
+			String infoLink, JSONArray genre, AUTHORTYPE type) {
 		super();
 		this._id = _id;
 		this.name = name;
@@ -70,6 +74,14 @@ public class Author {
 		this.shortBio = shortBio;
 		this.infoLink = infoLink;
 		this.genre = genre;
+		this.type = type;
+	}
+	
+	public AUTHORTYPE getType() {
+		return type;
+	}
+	public void setType(AUTHORTYPE type) {
+		this.type = type;
 	}
 	public String get_id() {
 		return _id;
@@ -140,6 +152,7 @@ public class Author {
 		dbObj.put(SHORTBIO, shortBio);
 		dbObj.put(INFOLINK, infoLink);
 		dbObj.put(GENRE, genre.toString());
+		dbObj.put(TYPE, type.toString());
 		
 		return dbObj;
 	}
@@ -157,7 +170,7 @@ public class Author {
 		
 		return new Author(obj.getString(ID), Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)), com.qpeka.db.book.store.tuples.Constants.GENDER.valueOf(obj.getString(GENDER)),
 				new Date(obj.getLong(DOB)), obj.getString(NATIONALITY) , obj.getString(IMAGEFILE), obj.getString(SHORTBIO),obj.getString(INFOLINK),
-				genre);
+				genre , AUTHORTYPE.valueOf(obj.getString(TYPE)));
 	}
 	
 }

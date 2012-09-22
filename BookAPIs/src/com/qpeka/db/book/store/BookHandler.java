@@ -2,8 +2,8 @@ package com.qpeka.db.book.store;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.Cipher;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bson.types.ObjectId;
 
@@ -15,7 +15,6 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.tuples.Book;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
-import com.qpeka.db.book.store.tuples.Publisher;
 
 /*
  * 1) Primary key testing
@@ -30,7 +29,8 @@ public class BookHandler {
 	private static BookHandler instance = new BookHandler();
 	private DB db = null;
 	private DBCollection books = null;
-	
+	private static final Logger logger = Logger.getLogger(BookHandler.class.getName());
+
 	private BookHandler()
 	{
 		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
@@ -48,9 +48,11 @@ public class BookHandler {
 	
 	public String addBook(Book book)
 	{
+		long start = System.currentTimeMillis();
 		BasicDBObject dObj = (BasicDBObject)book.toDBObject(true);
 		WriteResult result = books.insert(dObj, WriteConcern.SAFE);
 		ObjectId id =  dObj.getObjectId("_id");
+		logger.log(Level.INFO, "time(addBook) = " + (System.currentTimeMillis() - start));
 		return id.toString();
 	}
 	

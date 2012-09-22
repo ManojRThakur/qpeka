@@ -14,6 +14,7 @@ public class APIConstants {
 	public static final String GETUSERRATINGSFORBOOK = "getuserratingsforbook";
 	public static final String GETUSERBOOKMARKFORBOOK = "getuserbookmarkforbook";
 	public static final String GETUSERBYID = "getuserbyid";
+	public static final String GETBOOKPAGECONTENT = "getbookpagecontent";
 	
 	
 }

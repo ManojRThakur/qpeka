@@ -9,7 +9,11 @@ public class Constants {
 	
 	public enum CATEGORY
 	{
-		FICTION, SUSPENSE , LOVE, COMEDY
+		Fiction, Suspense , Love, Comedy , Mystery ,  Motivational ,  Thrillers , 
+		Romance ,  Fantasies ,  Erotic ,  Horror ,  Biographies ,  Spiritual ,  
+		SelfHelp ,  Educational ,  Children ,  SciFi ,  Historical ,  Patriotic ,
+		History , Geography , Science , Languages , Art , Facts , Nature , Emotional ,
+		Situational , CurrentAffairs , Shayari , Songs , Ghazals 
 	}
 	
 	public enum USERTYPE
@@ -17,4 +21,8 @@ public class Constants {
 		PREMIUM , FREE
 	}
 	
+	public enum AUTHORTYPE
+	{
+		LEVEL1 , LEVEL2, LEVEL3
+	}
 }

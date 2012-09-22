@@ -1,5 +1,7 @@
 package com.qpeka.db.book.store.tuples;
 
+import org.json.JSONObject;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -65,5 +67,14 @@ public class Name {
 	public static Name getNamefromDBObject(BasicDBObject obj)
 	{
 		return new Name(obj.getString(FIRSTNAME), obj.getString(MIDDLENAME),obj.getString(LASTNAME));
+	}
+	
+	public static void main(String[] args) {
+		BasicDBObject dbObj = new BasicDBObject();
+		dbObj.put(FIRSTNAME, "firstName");
+		dbObj.put(MIDDLENAME, "middleName");
+		dbObj.put(LASTNAME, "lastNamde");
+		
+		System.out.println(dbObj.toString());
 	}
 }

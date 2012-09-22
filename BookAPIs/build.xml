@@ -53,6 +53,9 @@
 	</target>
 
 	<target name="bookapi-war" depends="jar" description="Compiles and creates the deployable war for RemoteMap">
+		<copy todir="${build.lib}" flatten="true">
+					<filelist refid="dependent-jars" />
+		</copy>
 		<war destfile="${lib.dir}/${war.name}.war" webxml="conf/web.xml">
 			<lib dir="${build.lib}" />
 			<classes dir="${build.classes}" includes="com/**" />

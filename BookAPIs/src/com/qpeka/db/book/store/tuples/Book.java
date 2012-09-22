@@ -49,15 +49,18 @@ public class Book {
 	public static final String COMMENTS ="comments";
 	public static final String RATINGS ="ratings"; 
 	public static final String DESCRIPTION ="description"; 
+	
 	//meta Keys
 	public static final String SEARCHKEY ="searchKey";
+	public static final String NUMWORDSPERPAGE ="nwpp"; 
+	public static final String NUMPAGESPERFILE ="nwpf"; 
 	
 	private String _id = "";
 	private String title = "";
 	private String authorId = "";
 	private String coverPageFile = "";
 	private int edition = 0;
-	private CATEGORY category = com.qpeka.db.book.store.tuples.Constants.CATEGORY.FICTION;
+	private CATEGORY category = com.qpeka.db.book.store.tuples.Constants.CATEGORY.Facts;
 	private int numPages = 0;
 	private String publisherId = "";
 	private float avgRating = 0.0f;

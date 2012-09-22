@@ -195,4 +195,10 @@ public class User {
 		
 		return dbObj;
 	}
+	
+	public static User getUserfromDBObject(BasicDBObject obj)
+	{
+		//return new User(obj.getString(ID), Name.getNamefromDBObject((BasicDBObject)obj.get(NAME)), com.qpeka.db.book.store.tuples.Constants.GENDER.valueOf(obj.getString(GENDER)), identities, address, interests, type, bookMarks, age, dob, nationality, imageFile)
+		return new User();
+	}
 }
