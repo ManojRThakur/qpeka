@@ -39,4 +39,9 @@ public class SystemConfigHandler
 	{
 		return props.getProperty(SystemConstants.BOOKCONTENTFOLDER);
 	}
+	
+	public String getBaseTinyURL()
+	{
+		return props.getProperty(SystemConstants.BASETINYURL);
+	}
 }

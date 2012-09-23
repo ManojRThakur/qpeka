@@ -1,11 +1,9 @@
 package com.qpeka.db.book.store;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -15,8 +13,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.tuples.Author;
-import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
-import com.qpeka.db.book.store.tuples.Constants.GENDER;
 import com.qpeka.db.book.store.tuples.Name;
 import com.qpeka.db.book.store.tuples.Publisher;
 

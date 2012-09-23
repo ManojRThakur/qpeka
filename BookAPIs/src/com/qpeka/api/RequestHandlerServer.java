@@ -11,7 +11,9 @@ public class RequestHandlerServer {
 	
 	private int port = 8000;
 	private AtomicBoolean started = new AtomicBoolean(false);
-	
+	private NioServerSocketChannelFactory factory = null;
+	private ServerBootstrap bootstrap = null;
+		
 	private static RequestHandlerServer instance = null;
 	
 	public static RequestHandlerServer getInstance()
@@ -35,16 +37,12 @@ public class RequestHandlerServer {
 		this.port = port;
 	}
 	
-	public void run()
+	public void start()
 	{
 		if(!started.getAndSet(true))
-		{
-			// Configure the server.
-			ServerBootstrap bootstrap = new ServerBootstrap(
-					new NioServerSocketChannelFactory(
-							Executors.newCachedThreadPool(),
-							Executors.newCachedThreadPool()));
-				  
+		{		  
+			factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
+			bootstrap = new ServerBootstrap(factory);
 			// Set up the pipeline factory.
 			bootstrap.setPipelineFactory(new UserrRequestServerPipelineFactory());
 				   
@@ -52,6 +50,7 @@ public class RequestHandlerServer {
 			bootstrap.bind(new InetSocketAddress(8080));
 			
 			System.out.println("Server started on port " + port);
+		
 		}
 		else
 		{
@@ -59,8 +58,24 @@ public class RequestHandlerServer {
 		}
 	}
 	
+	public void stop()
+	{
+		if(started.get())
+		{
+			factory.releaseExternalResources();
+			bootstrap.releaseExternalResources();
+			factory = null;
+			bootstrap = null;
+			System.out.println("Server stopped");
+		}
+		else
+		{
+			System.out.println("Server already stopped");
+		}
+	}
+	
 	public static void main(String[] args) {
 		
-		RequestHandlerServer.getInstance().run();
+		RequestHandlerServer.getInstance().start();
 	}
 }
