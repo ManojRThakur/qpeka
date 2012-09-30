@@ -22,6 +22,7 @@ import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
 	"publisherId" : "1345",
 	"rating" : "3",
 	"metaData" : "",
+	"description" : "",
 	"comments" : [{
 				commentText : "bla bla...",
 				commenter : "321",

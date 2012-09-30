@@ -51,7 +51,7 @@ public class User {
 	public static final String IMAGEFILE = "imageFile";
 	public static final String ADDRESS = "address";
 	public static final String INTERESTS = "interests";
-	public static final String IDENTITIES = "identities";
+	public static final String EMAIL = "email";
 	public static final String AGE = "age";
 	public static final String BOOKMARKS = "bookMarks";
 	public static final String TYPE = "type";
@@ -59,7 +59,6 @@ public class User {
 	private String _id = "";
 	private Name name = null;
 	private GENDER gender = com.qpeka.db.book.store.tuples.Constants.GENDER.MALE;
-	private List<UserIdentity> identities;
 	private Address address;
 	private Set<CATEGORY> interests;
 	private USERTYPE type;
@@ -68,7 +67,8 @@ public class User {
 	private Date dob;
 	private String nationality;
 	private String imageFile;
-
+	private String email;
+	
 	public User()
 	{
 		
@@ -76,14 +76,14 @@ public class User {
 	
 	public User(String _id, Name name,
 			com.qpeka.db.book.store.tuples.Constants.GENDER gender,
-			List<UserIdentity> identities, Address address,
+			String email, Address address,
 			Set<CATEGORY> interests, USERTYPE type, List<BookMark> bookMarks,
 			int age, Date dob, String nationality, String imageFile) {
 		super();
 		this._id = _id;
 		this.name = name;
 		this.gender = gender;
-		this.identities = identities;
+		this.email = email;
 		this.address = address;
 		this.interests = interests;
 		this.type = type;
@@ -94,6 +94,12 @@ public class User {
 		this.imageFile = imageFile;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getImageFile() {
 		return imageFile;
 	}
@@ -136,12 +142,6 @@ public class User {
 	public void setGender(GENDER gender) {
 		this.gender = gender;
 	}
-	public List<UserIdentity> getIdentities() {
-		return identities;
-	}
-	public void setIdentities(List<UserIdentity> identities) {
-		this.identities = identities;
-	}
 	public Address getAddress() {
 		return address;
 	}
@@ -182,7 +182,7 @@ public class User {
 		dbObj.put(IMAGEFILE, imageFile);
 		dbObj.put(ADDRESS, address.toDBObject());
 		dbObj.put(INTERESTS, interests.toString());
-		dbObj.put(IDENTITIES, identities.toString());
+		dbObj.put(EMAIL, email);
 		dbObj.put(AGE, age);
 		
 		Set<BasicDBObject> bookMarkSet = new HashSet<BasicDBObject>();
