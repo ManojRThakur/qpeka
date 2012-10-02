@@ -42,7 +42,7 @@ public class AuthorHandler {
 		return id.toString();
 	}
 	
-	public void updateBook(Author author)
+	public void updateAuthor(Author author)
 	{
 		BasicDBObject q = new BasicDBObject();
 		q.put(Author.ID, new ObjectId(author.get_id()));

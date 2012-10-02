@@ -4,8 +4,8 @@ BookAPI
 
 Request
 {
-	method : "getBookById",
-	id : "<id>"
+	method : "getbookgivenid",
+	bookid : "<id>"
 }
 
 Response
@@ -47,11 +47,11 @@ Response
 	id : "<generated book id>"
 }
 
-3) getBookByCategory
+3) getbooksgivencategory
 
 Request
 {
-	method : "getBookByCategory",
+	method : "getbooksgivencategory",
 	category : "<category>"
 }
 
@@ -75,11 +75,39 @@ Response
 	]
 }
 
-4) getBookByTitle
+4) getbooksgivenauthorname
 
 Request
 {
-	method : "getBookByTitle",
+	method : "getbooksgivenauthorname",
+	authorname : "<name>"
+}
+
+Response
+{
+	status : SUCCESS,
+	result : [
+	{
+		"_id" : "12345677",
+		"title" : "Harry Potter",
+		"authorId" : "13254",
+		"coverPageFile" : "/tmp/file/img.jpg",
+		"edition" : "1",
+		"category" : "Fiction",
+		"numPages" : "200",
+		"publisherId" : "1345",
+		"rating" : "3",
+		"metaData" : "",
+		"description" : ""
+	},{...} ,{....}
+	]
+}
+
+5) getbooksgiventitle
+
+Request
+{
+	method : "getbooksgiventitle",
 	title : "<title>"
 }
 
@@ -103,12 +131,12 @@ Response
 	]
 }
 
-5) getBookByTitle
+6) getbooksgivenauthorid
 
 Request
 {
-	method : "getBookByTitle",
-	title : "<title>"
+	method : "getbooksgivenauthorid",
+	authorid : "<authorId>"
 }
 
 Response
@@ -131,40 +159,12 @@ Response
 	]
 }
 
-6) getBooksByAuthorId
-
-Request
-{
-	method : "getBooksByAuthorId",
-	authorId : "<authorId>"
-}
-
-Response
-{
-	status : SUCCESS,
-	result : [
-	{
-		"_id" : "12345677",
-		"title" : "Harry Potter",
-		"authorId" : "13254",
-		"coverPageFile" : "/tmp/file/img.jpg",
-		"edition" : "1",
-		"category" : "Fiction",
-		"numPages" : "200",
-		"publisherId" : "1345",
-		"rating" : "3",
-		"metaData" : "",
-		"description" : ""
-	},{...} ,{....}
-	]
-}
-
-7) getAuthorsbyName
+7) getauthorgivenid
 
  Request
 {
-	method : "getAuthorsbyName",
-	name : "<name>"
+	method : "getauthorgivenid",
+	authorid : "<id>"
 }
 
 Response
@@ -189,8 +189,38 @@ Response
 		},{...} ,{....}
 	]
 }
- 
-8) getbookpagecontent
+
+8) getauthorsgivenname
+
+ Request
+{
+	method : "getauthorsgivenname",
+	authorName : "<name>"
+}
+
+Response
+{
+	status : SUCCESS,
+	result : [
+		{
+		_id : "<id>",
+		name : {
+					firstName : "manoj",
+					middleName : "R"
+					lastName : "thakur"
+				},
+		gender : M,
+		dob : 12321312,
+		nationality : "Indian",
+		imageFile : "/tmp/img3.jpg",
+		shortBio : "jrcbkuhgr grlfgruflrgflrgfk, gfkjsdgf,sjdg flksjagf",
+		infoLink : "http://google.com",
+		genre : "Fiction"
+		
+		},{...} ,{....}
+	]
+} 
+9) getbookpagecontent
  
 Request
 {
@@ -205,4 +235,32 @@ Response
 	content : <content>,
 	bookId : "<bookid>",
 	pageId : "<pageId>"
+}
+
+10) getbooksgivencriteria
+
+Request
+{
+	method : "getbooksgivencriteria",
+	criteria : "<anything that is searched for>"
+}
+
+Response
+{
+	status : SUCCESS,
+	result : [
+	{
+		"_id" : "12345677",
+		"title" : "Harry Potter",
+		"authorId" : "13254",
+		"coverPageFile" : "/tmp/file/img.jpg",
+		"edition" : "1",
+		"category" : "Fiction",
+		"numPages" : "200",
+		"publisherId" : "1345",
+		"rating" : "3",
+		"metaData" : "",
+		"description" : ""
+	},{...} ,{....}
+	]	
 }

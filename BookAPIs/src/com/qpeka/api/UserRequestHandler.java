@@ -5,12 +5,10 @@ import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +23,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
-import org.jboss.netty.handler.codec.http.QueryStringDecoder;
 import org.jboss.netty.util.CharsetUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +49,8 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
    	  Map<String, String> requestParams = new HashMap<String, String>();
    	  
    	  HttpRequest request =  (HttpRequest) e.getMessage();
-   	        
+   	   
+   	  /*
    	  QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
    	  Map<String, List<String>> params = queryStringDecoder.getParameters();
    	  if (!params.isEmpty()) {
@@ -60,11 +58,20 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
    			  String key = p.getKey();
    			  requestParams.put(key, p.getValue().get(0));
    		  }
-   	  }	  
-   	  
-   	  logger.log(Level.INFO, "[UserRequestHandler-"+Thread.currentThread().getId()+"] Handling request with params " + requestParams.toString());
-   	  
-   	  invokeApi(requestParams , e);
+   	  }*/
+   	  try
+   	  {
+	   	  JSONObject requestJson = new JSONObject(request.getContent().toString());
+	   	  
+	   	  logger.log(Level.INFO, "[UserRequestHandler-"+Thread.currentThread().getId()+"] Handling request with params " + requestParams.toString());
+	   	  
+	   	  invokeApi(requestJson , e);
+   	  }
+   	  catch (Exception ex) {
+		// TODO: handle exception
+   		logger.log(Level.INFO, "[UserRequestHandler-"+Thread.currentThread().getId()+"] Exception  while handling request " + ex.getMessage());
+	   	  
+	}
     }
 
 	@Override
@@ -75,139 +82,203 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
 		e.getChannel().close();
 	}
 	
-	private void invokeApi(Map<String, String> requestParams, MessageEvent e)
+	private void invokeApi(JSONObject requestJson, MessageEvent e) 
 	{
 		
+		JSONObject response = new JSONObject();
+		String res = "";
 		
-		if(!requestParams.containsKey("method"))
+		try
 		{
-			writeResponse(e, "{ error : Request should contain method parameter }");
-			return;
-		}
-		
-		
-		String method = requestParams.get("method");
-			
-		if(method.equals(APIConstants.GETBOOKGIVENID))
-		{
-			if(!requestParams.containsKey("bookid"))
+			if(!requestJson.has("method"))
 			{
-				writeResponse(e, "{ error : Request should contain bookid parameter }");
+				writeResponse(e, "{ error : Request should contain method parameter }");
 				return;
 			}
-				
-			Book b = BookContentManager.getInstance().getBookDetails(requestParams.get("bookid"));
-			writeResponse(e, b.toDBObject(false).toString());
 			
-		}
-		else if(method.equals(APIConstants.GETBOOKSGIVENCRITERIA))
-		{
-			if(!requestParams.containsKey("criteria"))
+			
+			String method = (String)requestJson.get("method");
+				
+			if(method.equals(APIConstants.GETBOOKGIVENID))
 			{
-				writeResponse(e, "{ error : Request should contain criteria parameter }");
-				return;
+				if(!requestJson.has("bookid"))
+				{
+					writeResponse(e, "{ error : Request should contain bookid parameter }");
+					return;
+				}
+					
+				Book b = BookContentManager.getInstance().getBookDetails((String)requestJson.get("bookid"));
+				
+				res =  b.toDBObject(false).toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				writeResponse(e,response.toString());
+				
 			}
-				
-			List<Book> books = BookContentManager.getInstance().getBooksByCriteria(requestParams.get("criteria"));
-			List<String> resp = new ArrayList<String>();
-			
-			for(Book b : books)
-				resp.add(b.toDBObject(false).toString());
-			
-			writeResponse(e, resp.toString());
-			
-		}
-		else if(method.equals(APIConstants.GETBOOKSGIVENCATEGORY))
-		{
-			if(!requestParams.containsKey("category"))
+			else if(method.equals(APIConstants.GETBOOKSGIVENCRITERIA))
 			{
-				writeResponse(e, "{ error : Request should contain category parameter }");
-				return;
-			}
-				
-			try
-			{
-				List<Book> books = BookContentManager.getInstance().getBookDetailsByCategory(CATEGORY.valueOf(requestParams.get("category")));
+				if(!requestJson.has("criteria"))
+				{
+					writeResponse(e, "{ error : Request should contain criteria parameter }");
+					return;
+				}
+					
+				List<Book> books = BookContentManager.getInstance().getBooksByCriteria((String)requestJson.get("criteria"));
 				List<String> resp = new ArrayList<String>();
 				
 				for(Book b : books)
 					resp.add(b.toDBObject(false).toString());
 				
-				writeResponse(e, resp.toString());
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+				
 			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-				writeResponse(e, "{ error : Invalid category parameter } ");
-				return;
+			else if(method.equals(APIConstants.GETBOOKSGIVENCATEGORY))
+			{
+				if(!requestJson.has("category"))
+				{
+					writeResponse(e, "{ error : Request should contain category parameter }");
+					return;
+				}
+					
+				List<Book> books = BookContentManager.getInstance().getBookDetailsByCategory(CATEGORY.valueOf((String)requestJson.get("category")));
+				List<String> resp = new ArrayList<String>();
+					
+				for(Book b : books)
+					resp.add(b.toDBObject(false).toString());
+					
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+				
 			}
-		}
-		else if(method.equals(APIConstants.GETBOOKSGIVENAUTHORNAME))
-		{
-			if(!requestParams.containsKey("authorname"))
+			else if(method.equals(APIConstants.GETBOOKSGIVENTITLE))
+			{
+				if(!requestJson.has("title"))
+				{
+					writeResponse(e, "{ error : Request should contain title parameter }");
+					return;
+				}
+					
+				List<Book> books = BookContentManager.getInstance().getBookDetailsByTitle((String)requestJson.get("title"));
+				List<String> resp = new ArrayList<String>();
+					
+				for(Book b : books)
+					resp.add(b.toDBObject(false).toString());
+					
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+			
+			}
+			else if(method.equals(APIConstants.GETBOOKSGIVENAUTHORID))
+			{
+				if(!requestJson.has("authorid"))
+				{
+					
+					writeResponse(e, "{ error : Request should contain authorid parameter }");
+					return;
+				}
+					
+				List<Book> books = BookContentManager.getInstance().getBookDetailsByAuthor((String)requestJson.get("authorid"));
+				List<String> resp = new ArrayList<String>();
+				
+				for(Book b : books)
+					resp.add(b.toDBObject(false).toString());
+				
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+			}
+			else if(method.equals(APIConstants.GETBOOKSGIVENAUTHORNAME))
+			{
+				if(!requestJson.has("authorname"))
+				{
+					
+					writeResponse(e, "{ error : Request should contain authorname parameter }");
+					return;
+				}
+					
+				List<Book> books = BookContentManager.getInstance().getBookDetailsByAuthorName((String)requestJson.get("authorname"));
+				List<String> resp = new ArrayList<String>();
+				
+				for(Book b : books)
+					resp.add(b.toDBObject(false).toString());
+				
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+			}
+			else if(method.equals(APIConstants.GETAUTHORGIVENID))
+			{
+				if(!requestJson.has("authorid"))
+				{
+					writeResponse(e, "{ error : Request should contain authorId parameter }");
+					return;
+				}
+					
+				Author author = AuthorHandler.getInstance().getAuthor((String)requestJson.get("authorId"));
+				
+				res = author.toDBObject(false).toString();
+				
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
+				
+			}
+			else if(method.equals(APIConstants.GETAUTHORSGIVENCATEGORY))
 			{
 				
-				writeResponse(e, "{ error : Request should contain authorname parameter }");
-				return;
 			}
+			else if(method.equals(APIConstants.GETAUTHORSGIVENNAME))
+			{
+				if(!requestJson.has("authorName"))
+				{
+					writeResponse(e, "{ error : Request should contain authorName parameter }");
+					return;
+				}
 				
-			List<Book> books = BookContentManager.getInstance().getBookDetailsByAuthorName(requestParams.get("authorname"));
-			List<String> resp = new ArrayList<String>();
-			
-			for(Book b : books)
-				resp.add(b.toDBObject(false).toString());
-			
-			writeResponse(e, resp.toString());
-		}
-		else if(method.equals(APIConstants.GETAUTHORGIVENID))
-		{
-			if(!requestParams.containsKey("authorId"))
-			{
-				writeResponse(e, "{ error : Request should contain authorId parameter }");
-				return;
-			}
+				List<Author> authors = AuthorHandler.getInstance().getAuthorsByLikelyName((String)requestJson.get("authorName"));
+				List<String> resp = new ArrayList<String>();
 				
-			Author author = AuthorHandler.getInstance().getAuthor(requestParams.get("authorId"));
-			writeResponse(e, author.toDBObject(false).toString());
-			
-		}
-		else if(method.equals(APIConstants.GETAUTHORSGIVENCATEGORY))
-		{
-			
-		}
-		else if(method.equals(APIConstants.GETAUTHORSGIVENNAME))
-		{
-			if(!requestParams.containsKey("authorName"))
-			{
-				writeResponse(e, "{ error : Request should contain authorName parameter }");
-				return;
+				for(Author a : authors)
+					resp.add(a.toString());
+				
+				res = resp.toString();
+				response.put("result", res);
+				response.put("status", "SUCCESS");
+				
+				writeResponse(e, response.toString());
 			}
-			
-			List<Author> authors = AuthorHandler.getInstance().getAuthorsByLikelyName(requestParams.get("authorName"));
-			List<String> resp = new ArrayList<String>();
-			
-			for(Author a : authors)
-				resp.add(a.toString());
-			
-			writeResponse(e, resp.toString());
-		}
-		else if(method.equals(APIConstants.GETBOOKPAGECONTENT))
-		{
-			if(!requestParams.containsKey("bookId") || !requestParams.containsKey("pageId"))
+			else if(method.equals(APIConstants.GETBOOKPAGECONTENT))
 			{
-				writeResponse(e, "{ error : invalid request }");
-				return;
-			}
-			
-			try {
-				JSONObject jObj = BookContentManager.getInstance().getContentGivenBookPageId(requestParams.get("bookId"), Integer.parseInt(requestParams.get("pageId")));
+				if(!requestJson.has("bookId") || !requestJson.has("pageId"))
+				{
+					writeResponse(e, "{ error : invalid request }");
+					return;
+				}
+				
+				JSONObject jObj = BookContentManager.getInstance().getContentGivenBookPageId((String)requestJson.get("bookId"), Integer.parseInt((String)requestJson.get("pageId")));
 				writeResponse(e, jObj.getString("content"));
-			} catch (NumberFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (JSONException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
+				
 			}
+		}
+		catch (Exception ex) 
+		{
+			ex.printStackTrace();
+			writeResponse(e, "{ error : "+ex.getMessage()+" }");
 		}
 	}
 

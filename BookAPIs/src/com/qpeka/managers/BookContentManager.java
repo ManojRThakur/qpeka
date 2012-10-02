@@ -65,6 +65,11 @@ public class BookContentManager {
 		return BookHandler.getInstance().getBooksByCategory(category);
 	}
 	
+	public List<Book> getBookDetailsByTitle(String title)
+	{
+		return BookHandler.getInstance().getBooksByTitle(title);
+	}
+	
 	public List<Book> getBookDetailsByAuthor(String authorId)
 	{
 		return BookHandler.getInstance().getBooksByAuthorId(authorId);
