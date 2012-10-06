@@ -55,10 +55,11 @@ public class User {
 	public static final String AGE = "age";
 	public static final String BOOKMARKS = "bookMarks";
 	public static final String TYPE = "type";
+	public static final String PHONE = "phone";
 	
 	private String _id = "";
 	private Name name = null;
-	private GENDER gender = com.qpeka.db.book.store.tuples.Constants.GENDER.MALE;
+	private GENDER gender = com.qpeka.db.book.store.tuples.Constants.GENDER.Male;
 	private Address address;
 	private Set<CATEGORY> interests;
 	private USERTYPE type;
@@ -68,6 +69,7 @@ public class User {
 	private String nationality;
 	private String imageFile;
 	private String email;
+	private String phone;
 	
 	public User()
 	{
@@ -78,7 +80,7 @@ public class User {
 			com.qpeka.db.book.store.tuples.Constants.GENDER gender,
 			String email, Address address,
 			Set<CATEGORY> interests, USERTYPE type, List<BookMark> bookMarks,
-			int age, Date dob, String nationality, String imageFile) {
+			int age, Date dob, String nationality, String imageFile, String phone) {
 		super();
 		this._id = _id;
 		this.name = name;
@@ -92,8 +94,16 @@ public class User {
 		this.dob = dob;
 		this.nationality = nationality;
 		this.imageFile = imageFile;
+		this.phone = phone;
 	}
 
+	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -192,6 +202,7 @@ public class User {
 		}
 		
 		dbObj.put(BOOKMARKS, bookMarkSet);
+		dbObj.put(PHONE, phone);
 		
 		return dbObj;
 	}

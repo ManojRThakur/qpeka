@@ -38,8 +38,8 @@ private static UserManager instance = null;
 		return instance;
 	}
 	
-	public void addUser(String firstName, String middleName, String lastName, String gender, String email, String city, String state, String addressLine1,
-			String addressLine2, String addressLine3, String pincode , String userType, String[] preferences, int age , Date dob, String nationality)
+	public String addUser(String firstName, String middleName, String lastName, String gender, String email, String city, String state, String addressLine1,
+			String addressLine2, String addressLine3, String pincode , String userType, String[] preferences, int age , Date dob, String nationality, String phone)
 	{
 		Address addr = new Address(city, state, addressLine1, addressLine2, addressLine3, pincode);
 		Set<CATEGORY> interests = new HashSet<CATEGORY>();
@@ -54,12 +54,12 @@ private static UserManager instance = null;
 			}
 		}
 		
-		User u = new User("", new Name(firstName, middleName, lastName), GENDER.valueOf(gender), email, addr, interests, USERTYPE.valueOf(userType), new ArrayList<BookMark>(), age, dob, nationality, "");
-		UserHandler.getInstance().addUser(u);
+		User u = new User("", new Name(firstName, middleName, lastName), GENDER.valueOf(gender), email, addr, interests, USERTYPE.valueOf(userType), new ArrayList<BookMark>(), age, dob, nationality, "", phone);
+		return UserHandler.getInstance().addUser(u);
 	}
 	
 	public void updateUser(String firstName, String middleName, String lastName, String gender, String email, String city, String state, String addressLine1,
-			String addressLine2, String addressLine3, String pincode , String userType, String[] preferences, int age , Date dob, String nationality)
+			String addressLine2, String addressLine3, String pincode , String userType, String[] preferences, int age , Date dob, String nationality, String phone)
 	{
 		Address addr = new Address(city, state, addressLine1, addressLine2, addressLine3, pincode);
 		Set<CATEGORY> interests = new HashSet<CATEGORY>();
@@ -74,7 +74,7 @@ private static UserManager instance = null;
 			}
 		}
 		
-		User u = new User("", new Name(firstName, middleName, lastName), GENDER.valueOf(gender), email, addr, interests, USERTYPE.valueOf(userType), new ArrayList<BookMark>(), age, dob, nationality, "");
+		User u = new User("", new Name(firstName, middleName, lastName), GENDER.valueOf(gender), email, addr, interests, USERTYPE.valueOf(userType), new ArrayList<BookMark>(), age, dob, nationality, "", phone);
 		UserHandler.getInstance().updateUser(u);
 	}
 	

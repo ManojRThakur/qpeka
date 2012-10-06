@@ -1,11 +1,12 @@
 package com.qpeka.api;
 
-
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,19 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
+import org.jboss.netty.handler.codec.http.HttpMessage;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.util.CharsetUtil;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.qpeka.db.book.store.AuthorHandler;
 import com.qpeka.db.book.store.tuples.Author;
 import com.qpeka.db.book.store.tuples.Book;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
+import com.qpeka.db.book.store.tuples.User;
 import com.qpeka.managers.BookContentManager;
+import com.qpeka.managers.UserManager;
 
 public class UserRequestHandler extends SimpleChannelUpstreamHandler {
 
@@ -49,7 +52,8 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
    	  Map<String, String> requestParams = new HashMap<String, String>();
    	  
    	  HttpRequest request =  (HttpRequest) e.getMessage();
-   	   
+   	  
+   	  System.out.println(request.getContent().toString(Charset.defaultCharset()));
    	  /*
    	  QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
    	  Map<String, List<String>> params = queryStringDecoder.getParameters();
@@ -61,7 +65,7 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
    	  }*/
    	  try
    	  {
-	   	  JSONObject requestJson = new JSONObject(request.getContent().toString());
+	   	  JSONObject requestJson = new JSONObject(request.getContent().toString("UTF-8"));
 	   	  
 	   	  logger.log(Level.INFO, "[UserRequestHandler-"+Thread.currentThread().getId()+"] Handling request with params " + requestParams.toString());
 	   	  
@@ -99,7 +103,27 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
 			
 			String method = (String)requestJson.get("method");
 				
-			if(method.equals(APIConstants.GETBOOKGIVENID))
+			if(method.equals(APIConstants.REGISTERUSER))
+			{
+				if(!requestJson.has("userinfo"))
+				{
+					writeResponse(e, "{ error : Request should contain userinfo parameter }");
+					return;
+				}
+				JSONObject userInfo = requestJson.getJSONObject("userinfo");
+				
+				long age = (System.currentTimeMillis() - userInfo.getLong(APIConstants.DOB))/(1000 * 60 * 60 * 24 * 365);
+				
+				String id = UserManager.getInstance().addUser(userInfo.getString(APIConstants.FIRSTNAME), userInfo.getString(APIConstants.MIDDLENAME), userInfo.getString(APIConstants.LASTNAME),
+						userInfo.getString(APIConstants.GENDER), userInfo.getString(APIConstants.EMAIL), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.CITY), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.STATE),
+						userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE1), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE2), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE3), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.PINCODE), 
+						userInfo.getString(APIConstants.USERTYPE), userInfo.getString(APIConstants.PREFERENCES).split(","), (int)age, new Date(userInfo.getLong(APIConstants.DOB)), userInfo.getString(APIConstants.NATIONALITY), userInfo.getString(APIConstants.PHONE));
+				
+				response.put("id", id);
+				response.put("status", "SUCCESS");
+				writeResponse(e,response.toString());
+			}
+			else if(method.equals(APIConstants.GETBOOKGIVENID))
 			{
 				if(!requestJson.has("bookid"))
 				{
@@ -111,6 +135,21 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
 				
 				res =  b.toDBObject(false).toString();
 				response.put("result", res);
+				response.put("status", "SUCCESS");
+				writeResponse(e,response.toString());
+				
+			}
+			else if(method.equals(APIConstants.GETUSERBYID))
+			{
+				if(!requestJson.has("userid"))
+				{
+					writeResponse(e, "{ error : Request should contain userid parameter }");
+					return;
+				}
+					
+				String user = UserManager.getInstance().getUser((String)requestJson.get("userid"));
+				
+				response.put("result", user);
 				response.put("status", "SUCCESS");
 				writeResponse(e,response.toString());
 				

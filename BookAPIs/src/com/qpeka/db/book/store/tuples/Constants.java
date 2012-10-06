@@ -4,7 +4,7 @@ public class Constants {
 	
 	public enum GENDER
 	{
-		MALE, FEMALE
+		Male, Female
 	}
 	
 	public enum CATEGORY

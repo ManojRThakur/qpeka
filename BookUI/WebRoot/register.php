@@ -55,38 +55,46 @@ function registration(){
 			return false;
 		}*/
 
-var JSONObject = {
-    "firstName" : firstName,
-    "middleName" : middleName,
-    "lastName" : lastName,
-    "gender" : gender,
-    "email" : email,
-    "phone" : phone,
-    "address" : {
-        "CITY" : city,
-        "STATE" : state,
-        "ADDRESSLINE1" : addressline1,
-        "ADDRESSLINE2" : addressline2,
-        "ADDRESSLINE3" : addressline3,
-        "PINCODE" : pincode
-    }        
+var JSONObject = 
+{
+            "method" : 'registeruser',
+	    "userinfo" : {
+		    "firstName" : firstName,
+		    "middleName" : middleName,
+		    "lastName" : lastName,
+		    "gender" : gender,
+		    "email" : email,
+		    "phone" : phone,
+		    "address" : {
+			"city" : city,
+			"state" : state,
+			"addressline1" : addressline1,
+			"addressline2" : addressline2,
+			"addressline3" : addressline3,
+			"pincode" : pincode
+		    },   
+		    "dob": '2312123',
+		    "usertype" : 'FREE',
+                    "nationality" : 'India',
+		    "preferences" : 'FICTION'    
+	    }
 };
 //JSON.stringify(JSONOject);
 jsonstr = JSON.stringify(JSONObject);
 console.log(JSONObject);
 console.log(jsonstr);
 
-jsonstr = encodeURI(jsonstr);
+//jsonstr = encodeURI(jsonstr);
 console.log(jsonstr);
-	var url = url+'?params='+jsonstr+'&rand='+Math.random();
+	var url = 'http://192.168.2.6:8080'+'?rand='+Math.random();
 	var xmlhttp=new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status == 200) {
 			alert('succes submit');
 		}
 	}
-	xmlhttp.open("GET",url,true);
-	xmlhttp.send();
+	xmlhttp.open("POST",url,true);
+	xmlhttp.send(jsonstr);
 }
 </script>
 
