@@ -112,12 +112,12 @@ public class UserRequestHandler extends SimpleChannelUpstreamHandler {
 				}
 				JSONObject userInfo = requestJson.getJSONObject("userinfo");
 				
-				long age = (System.currentTimeMillis() - userInfo.getLong(APIConstants.DOB))/(1000 * 60 * 60 * 24 * 365);
+				int age = new Date().getYear() - new Date(userInfo.getLong(APIConstants.DOB)).getYear();
 				
 				String id = UserManager.getInstance().addUser(userInfo.getString(APIConstants.FIRSTNAME), userInfo.getString(APIConstants.MIDDLENAME), userInfo.getString(APIConstants.LASTNAME),
 						userInfo.getString(APIConstants.GENDER), userInfo.getString(APIConstants.EMAIL), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.CITY), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.STATE),
 						userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE1), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE2), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.ADDRESSLINE3), userInfo.getJSONObject(APIConstants.ADDRESS).getString(APIConstants.PINCODE), 
-						userInfo.getString(APIConstants.USERTYPE), userInfo.getString(APIConstants.PREFERENCES).split(","), (int)age, new Date(userInfo.getLong(APIConstants.DOB)), userInfo.getString(APIConstants.NATIONALITY), userInfo.getString(APIConstants.PHONE));
+						userInfo.getString(APIConstants.USERTYPE), userInfo.getString(APIConstants.PREFERENCES).split(","), age, new Date(userInfo.getLong(APIConstants.DOB)), userInfo.getString(APIConstants.NATIONALITY), userInfo.getString(APIConstants.PHONE));
 				
 				response.put("id", id);
 				response.put("status", "SUCCESS");
