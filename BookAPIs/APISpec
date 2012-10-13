@@ -264,3 +264,72 @@ Response
 	},{...} ,{....}
 	]	
 }
+
+11) registeruser
+Request
+{
+	method : "registeruser",
+	userinfo : {
+	    "firstName" : firstName,
+	    "middleName" : middleName,
+	    "lastName" : lastName,
+	    "gender" : gender,
+	    "email" : email,
+	    "phone" : phone,
+	    "address" : {
+		"city" : city,
+		"state" : state,
+		"addressline11" : addressline1,
+		"addressline2" : addressline2,
+		"addressline3" : addressline3,
+		"pincode" : pincode
+	    },
+	    usertype: "<usertype>" <drop down PREMIUM, FREE as of now>
+ 	    dob: "time in milliseconds" <take date in the ui>
+	    nationality : "<nationality>" <drop down of all countries>
+	    preferences : "<, separated list>" <will be a drop down in the UI>
+       }
+	
+}
+Response
+{
+	status : SUCCESS,
+	id:"<generated userID>"
+}
+
+12) Login flow:
+authenticate from the php code in mysql, then get userdata using:
+
+'getuserbyid'
+Request
+{
+	userid:"<id>",
+	method:"getuserbyid"
+}
+
+Response
+{
+	status:"SUCCESS",
+	result:{
+	    "firstName" : firstName,
+	    "middleName" : middleName,
+	    "lastName" : lastName,
+	    "gender" : gender,
+	    "email" : email,
+	    "phone" : phone,
+	    "address" : {
+		"city" : city,
+		"state" : state,
+		"addressline11" : addressline1,
+		"addressline2" : addressline2,
+		"addressline3" : addressline3,
+		"pincode" : pincode
+	    },
+	    usertype: "<usertype>" <drop down PREMIUM, FREE as of now>
+ 	    dob: "time in milliseconds" <take date in the ui>
+	    nationality : "<nationality>" <drop down of all countries>
+	    preferences : "<, separated list>" <will be a drop down in the UI>
+       }
+}
+
+
