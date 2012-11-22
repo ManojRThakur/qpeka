@@ -29,7 +29,7 @@ import org.json.JSONObject;
  */
 public class BookConverterUtils {
 	
-	public void convertDOCToQPEKA(String baseDestDir, String srcFile, String destFilePrefix) throws FileNotFoundException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException 
+	public static void convertDOCToQPEKA(String baseDestDir, String srcFile, String destFilePrefix) throws FileNotFoundException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException 
 	{
 
 		int fileIndex = 1;
@@ -143,7 +143,7 @@ public class BookConverterUtils {
 
 	}
 	
-	public void convertFromDOCXToQPEKA(String baseDestDir, String srcFile, String destFilePrefix) throws FileNotFoundException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException 
+	public static void convertFromDOCXToQPEKA(String baseDestDir, String srcFile, String destFilePrefix) throws FileNotFoundException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException 
 	{
 
 		int fileIndex = 1;
