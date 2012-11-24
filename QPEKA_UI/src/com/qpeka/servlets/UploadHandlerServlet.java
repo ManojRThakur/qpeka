@@ -178,17 +178,16 @@ public class UploadHandlerServlet extends HttpServlet {
         	genre.put(authorGenre.name());
         	authorDetails.put("genre",genre.toString());
         	authorDetails.put("type",AUTHORTYPE.LEVEL1.name());
-        				
-        	
-        	BookContentManager.getInstance().addBook(title, publisherDetails, "/tmp/converted/", Integer.parseInt(bookEdition),
-        			3.5f, "", bookCategory.name(), 100, bookDesc, authorDetails);
-        	
-			if(fileName.endsWith(".doc"))
-				BookConverterUtils.convertDOCToQPEKA("/tmp/converted/", "/var/tmp/uploads/"+fileName, title);
+        	int numPages = 0;			
+        	if(fileName.endsWith(".doc"))
+        		numPages = BookConverterUtils.convertDOCToQPEKA("/books/content/", "/var/tmp/uploads/"+fileName, title);
 			else if(fileName.endsWith(".docx"))
-				BookConverterUtils.convertFromDOCXToQPEKA("/tmp/converted/", "/var/tmp/uploads/"+fileName, title);
+				BookConverterUtils.convertFromDOCXToQPEKA("/books/content/", "/var/tmp/uploads/"+fileName, title);
+        	
+        	String id = BookContentManager.getInstance().addBook(title, publisherDetails, "/book/cover/"+title+".jpg", Integer.parseInt(bookEdition),
+        			3.5f, "", bookCategory.name(), numPages, bookDesc, authorDetails);
 			
-			response.sendRedirect(request.getContextPath()+"/bookView.jsp?fileDir=/tmp/converted/&filePrefix="+title+"&pageNo=1");
+			response.sendRedirect(request.getContextPath()+"/bookViewer.jsp?pageNo=0&book="+id);
         }
         catch (Exception e) {
 			// TODO: handle exception

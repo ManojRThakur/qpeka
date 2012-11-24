@@ -40,17 +40,22 @@ public class BookConverterUtils {
 		HWPFDocument hwpfDocument = new HWPFDocument(new FileInputStream(srcFile));
 		WordExtractor we = new WordExtractor(hwpfDocument);
 		
-		
 		String[] arr = null;
 		int pageNum = 1;
 		int pageSize = 0;
 		int lines = 0;
 		JSONObject pagesJson = new JSONObject();
 		StringBuffer pageText = new StringBuffer(); 
-		
+		boolean isChapterEnd = false;
 		for(String paragraphText: we.getParagraphText())
 		{
 			paragraphText = paragraphText.trim();
+			
+			if(paragraphText.contains("Chapter"))
+			{
+				System.out.println("paragraphText=" + paragraphText);
+				isChapterEnd = true;
+			}
 			
 			if(paragraphText.length() == 0)
 			{ 
@@ -63,23 +68,31 @@ public class BookConverterUtils {
  			
 			for(int k = 0 ; k < arr.length ; k ++ )
 			{
+				if(!isChapterEnd)
+				{
+					pageText.append(arr[k] + " ");
+					pageSize++;
+				}
 				
-				pageText.append(arr[k] + " ");
-				pageSize++;
-				
-				if(pageSize > 150 || lines >= 12)
+				if(pageSize > 150 || lines >= 12 || isChapterEnd)
 				{
 					pageSize = 0; 
 					lines = 0;
 					
-					if(!pageText.toString().endsWith("."))
-						pageText.append(".......");
-					
+//					if(!pageText.toString().endsWith("."))
+//						pageText.append(".......");
+//					
 					try 
 					{
 						System.out.println("Creating page " + pageNum);
 						pagesJson.put(""+pageNum, pageText.toString());
 						pageText = new StringBuffer();
+						if(isChapterEnd)
+						{
+							pageText.append(paragraphText);
+							k++;
+							isChapterEnd = false;
+						}
 					}
 					catch (JSONException e1) {
 						// TODO Auto-generated catch block

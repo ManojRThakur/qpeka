@@ -1,4 +1,6 @@
 <!doctype html>
+<%@page import="com.qpeka.managers.BookContentManager"%>
+<%@page import="com.qpeka.db.book.store.tuples.Book"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.File"%>
 <%@page import="org.json.JSONObject"%>
@@ -33,13 +35,17 @@ String dir = "";
 String filePrefix = "";
 int pageNo = 0;
 int numPagesPerFile = 100;
+int totalPages = 0;
 %>
 <%
+String bookId = request.getParameter("book");
+Book bk = BookContentManager.getInstance().getBookDetails(bookId);
 pageNo = Integer.parseInt(request.getParameter("pageNo"));
-
-dir = request.getParameter("fileDir");
-filePrefix = request.getParameter("filePrefix");
-
+totalPages = bk.getNumPages();
+//dir = request.getParameter("fileDir");
+dir = "/books/content/";
+//filePrefix = request.getParameter("filePrefix");
+filePrefix = bk.getTitle();
 
 int fileIndex = 0;
 if(pageNo/numPagesPerFile < 1)
@@ -82,26 +88,31 @@ var currentPage = <%=Integer.parseInt(request.getParameter("pageNo"))%>;
 function insertContent(pageNum,base,flag){
 	
 	if(flag == 'n')
+	{
 		pageNum = currentPage +1;
+	}
 	else if(flag == 'p')
 		pageNum = currentPage -1;
 	else if(flag == 'f')
 		pageNum = 1;
 	else if(flag == 'l')
-		pageNum = 814;
+		pageNum = <%=totalPages%>;
 	
 	var num = pageNum;
 	
+	if(num == 0)
+		document.getElementById('pageContent').innerHTML = '<img alt="" class="coverpage" src="http://localhost:8080/ImageServer/image?book="<%=bk.get_id()%>>';
+	
 	if(num >= base + 10)
 	{
-		window.location = '<%=request.getContextPath()%>/bookViewer.jsp?fileDir=<%=dir%>&filePrefix=<%=filePrefix%>&pageNo='+num;
+		window.location = '<%=request.getContextPath()%>/bookViewer.jsp?book=<%=bookId%>&pageNo='+num;
 	}
-	else if(num <= base - 1)
+	else if(num < base - 1)
 	{
 		if(num > 1)
-			window.location = '<%=request.getContextPath()%>/bookViewer.jsp?fileDir=<%=dir%>&filePrefix=<%=filePrefix%>&pageNo='+(base-1);
+			window.location = '<%=request.getContextPath()%>/bookViewer.jsp?book=<%=bookId%>&pageNo='+(base-1);
 		else
-			window.location = '<%=request.getContextPath()%>/bookViewer.jsp?fileDir=<%=dir%>&filePrefix=<%=filePrefix%>&pageNo='+1;
+			window.location = '<%=request.getContextPath()%>/bookViewer.jsp?book=<%=bookId%>&pageNo='+1;
 	}
 	else
 	{
@@ -135,9 +146,9 @@ function insertContent(pageNum,base,flag){
             			Page 1/213
             		</p> -->
             		<p id="pageContent" style="margin-left: 10px;margin-top: 10px;margin-right: 10px;margin-bottom: 10px;font-size:18px;">
-            		<%if(pageNo == 1) {%>
+            		<%if(pageNo == 0) {%>
             			
-            			<img alt="" class="coverpage" src="http://localhost:8080/ImageServer/image">
+            			<img alt="" class="coverpage" src="http://localhost:8080/ImageServer/image?book="<%=bk.get_id()%>>
             		
             		<%} else {%>
             		
@@ -147,12 +158,6 @@ function insertContent(pageNum,base,flag){
             		</p>
             		</div>
                 </div><!--disply-->
-                <%if(pageNo == 1) 
-                {%>
-                	<div id="content-0" style="display: none;">
-                		<img alt="" src="images/pride.LZZZZZZZ.jpg">
-                	</div>
-                <%}%>
                 <%for(int i = pageNo ; i < pageNo+10 ; i++ )
                 {
                 	if(j.has(i+"")){%>
