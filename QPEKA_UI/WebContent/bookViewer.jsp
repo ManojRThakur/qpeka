@@ -148,7 +148,7 @@ function insertContent(pageNum,base,flag){
             		<p id="pageContent" style="margin-left: 10px;margin-top: 10px;margin-right: 10px;margin-bottom: 10px;font-size:18px;">
             		<%if(pageNo == 0) {%>
             			
-            			<img alt="" class="coverpage" src="http://localhost:8080/ImageServer/image?book="<%=bk.get_id()%>>
+            			<img alt="" align="middle" src="http://localhost:8080/ImageServer/image?book="<%=bk.get_id()%>>
             		
             		<%} else {%>
             		
