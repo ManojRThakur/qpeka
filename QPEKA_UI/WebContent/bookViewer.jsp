@@ -135,10 +135,24 @@ function insertContent(pageNum,base,flag){
             			Page 1/213
             		</p> -->
             		<p id="pageContent" style="margin-left: 10px;margin-top: 10px;margin-right: 10px;margin-bottom: 10px;font-size:18px;">
-            			<%=j.get(pageNo+"")%>	
+            		<%if(pageNo == 1) {%>
+            			
+            			<img alt="" class="coverpage" src="http://localhost:8080/ImageServer/image">
+            		
+            		<%} else {%>
+            		
+            		<%=j.get(pageNo+"")%>	
+            		
+            		<%} %>
             		</p>
             		</div>
                 </div><!--disply-->
+                <%if(pageNo == 1) 
+                {%>
+                	<div id="content-0" style="display: none;">
+                		<img alt="" src="images/pride.LZZZZZZZ.jpg">
+                	</div>
+                <%}%>
                 <%for(int i = pageNo ; i < pageNo+10 ; i++ )
                 {
                 	if(j.has(i+"")){%>
