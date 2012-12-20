@@ -20,7 +20,9 @@ public class TinyBookURLIdGenerator {
 	
 	private TinyBookURLIdGenerator()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		if(!db.isAuthenticated())
+			db.authenticate("qpeka", new char[]{'q','p','e','k','a'});
 		mapping = db.getCollection("tinyUrlMapping");
 	}
 	

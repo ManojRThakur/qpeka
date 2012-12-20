@@ -2,6 +2,7 @@ package com.qpeka.servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -24,13 +25,14 @@ import com.qpeka.db.book.store.tuples.Constants.AUTHORTYPE;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
 import com.qpeka.managers.BookContentManager;
+import com.qpeka.utils.SystemConfigHandler;
 
 /**
  * Servlet implementation class UploadHandlerServlet
  */
 public class UploadHandlerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -61,6 +63,7 @@ public class UploadHandlerServlet extends HttpServlet {
 	    String bookDesc =  "";
 	    String authorDesc = "";
 	    String bookEdition = "";
+	    long dateofPub = -1l;
 	    CATEGORY bookCategory = CATEGORY.Children;
 	    CATEGORY authorGenre = CATEGORY.Children;
 	    String fileName = "";
@@ -71,6 +74,10 @@ public class UploadHandlerServlet extends HttpServlet {
 	    int day = 0;
 	    int month = 0;
 	    int year = 0;
+	    
+	    int pday = 0;
+	    int pmonth = 0;
+	    int pyear = 0;
 	    
         if (isMultipart) {
             FileItemFactory factory = new DiskFileItemFactory();
@@ -87,8 +94,8 @@ public class UploadHandlerServlet extends HttpServlet {
 	                    if (!item.isFormField()) {
 	                        fileName = item.getName();
 	 
-	                        String root = "/var/tmp";
-	                        File path = new File(root + "/uploads");
+	                        String root = SystemConfigHandler.getInstance().getSrcBookFolder();
+	                        File path = new File(root);
 	                        if (!path.exists()) {
 	                            boolean status = path.mkdirs();
 	                        }
@@ -141,6 +148,12 @@ public class UploadHandlerServlet extends HttpServlet {
 	                    		month = Integer.parseInt(value);
 	                    	if(name.equalsIgnoreCase("year"))
 	                    		year = Integer.parseInt(value);
+	                    	if(name.equalsIgnoreCase("pday"))
+	                    		pday = Integer.parseInt(value);
+	                    	if(name.equalsIgnoreCase("pmonth"))
+	                    		pmonth = Integer.parseInt(value);
+	                    	if(name.equalsIgnoreCase("pyear"))
+	                    		pyear = Integer.parseInt(value);
 	                    	if(name.equalsIgnoreCase("gender"))
 	                    		authorGender = GENDER.valueOf(value);
 	                    	if(name.equalsIgnoreCase("nationality"))
@@ -168,8 +181,8 @@ public class UploadHandlerServlet extends HttpServlet {
         	authorDetails.put("lastName",authorLName);
         	authorDetails.put("gender",authorGender.name());
         	
-        	Date dt = new Date(year, month, day); 
-        	authorDetails.put("dob",dt.getTime());
+        	
+        	authorDetails.put("dob",getDate(month,year,day));
         	authorDetails.put("nationality",nationality);
         	authorDetails.put("imageFile", "/test");
         	authorDetails.put("shortBio", authorDesc); 
@@ -180,17 +193,35 @@ public class UploadHandlerServlet extends HttpServlet {
         	authorDetails.put("type",AUTHORTYPE.LEVEL1.name());
         	int numPages = 0;			
         	if(fileName.endsWith(".doc"))
-        		numPages = BookConverterUtils.convertDOCToQPEKA("/books/content/", "/var/tmp/uploads/"+fileName, title);
+        		numPages = BookConverterUtils.convertDOCToQPEKA(SystemConfigHandler.getInstance().getBookContentFolder(),SystemConfigHandler.getInstance().getSrcBookFolder()+fileName, title);
 			else if(fileName.endsWith(".docx"))
-				BookConverterUtils.convertFromDOCXToQPEKA("/books/content/", "/var/tmp/uploads/"+fileName, title);
+				BookConverterUtils.convertFromDOCXToQPEKA(SystemConfigHandler.getInstance().getBookContentFolder(), SystemConfigHandler.getInstance().getSrcBookFolder()+fileName, title);
         	
-        	String id = BookContentManager.getInstance().addBook(title, publisherDetails, "/book/cover/"+title+".jpg", Integer.parseInt(bookEdition),
-        			3.5f, "", bookCategory.name(), numPages, bookDesc, authorDetails);
+        	String id = BookContentManager.getInstance().addBook(title, publisherDetails, SystemConfigHandler.getInstance().getBookCoverPageFolder()+title+".jpg", Integer.parseInt(bookEdition),
+        			3.5f, "", bookCategory.name(), numPages, bookDesc, authorDetails,getDate(pmonth,pyear,pday));
 			
 			response.sendRedirect(request.getContextPath()+"/bookViewer.jsp?pageNo=0&book="+id);
         }
         catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	private static long getDate(int month , int year , int date)
+	{
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, month-1);  
+		c.set(Calendar.DAY_OF_MONTH, date);  
+		c.set(Calendar.YEAR, year);
+		Date dt = c.getTime();
+		System.out.println(dt.toString());
+		return dt.getTime();
+	}
+	
+	public static void main(String[] args) {
+		
+		long l = getDate(12,1987,23);
+		
+		System.out.println(new Date(l));
 	}
 }

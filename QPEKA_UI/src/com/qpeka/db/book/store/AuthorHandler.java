@@ -25,7 +25,9 @@ public class AuthorHandler {
 	
 	private AuthorHandler()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		if(!db.isAuthenticated())
+			db.authenticate("qpeka", new char[]{'q','p','e','k','a'});
 		authors = db.getCollection("authors");
 	}
 	

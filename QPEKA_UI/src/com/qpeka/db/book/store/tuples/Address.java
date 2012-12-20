@@ -6,12 +6,12 @@ import com.mongodb.DBObject;
 public class Address {
 	
 	
-	public static final String CITY = "_id";
-	public static final String STATE = "name";
+	public static final String CITY = "city";
+	public static final String STATE = "state";
 	public static final String ADDRESSLINE1 = "addressLine1";
 	public static final String ADDRESSLINE2 = "addressLine2";
 	public static final String ADDRESSLINE3 = "addressLine3";
-	public static final String PINCODE = "name";
+	public static final String PINCODE = "pincode";
 	
 	private String city;
 	private String state;

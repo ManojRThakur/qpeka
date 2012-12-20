@@ -11,6 +11,20 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.tuples.BookPageViewLog;
 
+/*
+ * TBD in future
+ * {
+ * 		bookId:2396425427348029534243f,
+ * 		viewLog : {
+ * 			pageId:4,
+ * 			pageLog:{
+ * 				userId:2735648723547238,
+ * 				viewTime:{1625397123193,....}
+ * 			}
+ *		}
+ * }
+ */
+
 public class BookViewLogHandler {
 	
 	private static BookViewLogHandler instance = new BookViewLogHandler();
@@ -19,7 +33,8 @@ public class BookViewLogHandler {
 	
 	private BookViewLogHandler()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		db.authenticate("manoj.thakur66@gmail.com", new char[]{'A','v','a','y','a','1','2','3'});
 		bookViewLogs = db.getCollection("bookViewLog");
 		
 		BasicDBObject compoundIndex = new BasicDBObject(BookPageViewLog.BOOKID, 1);

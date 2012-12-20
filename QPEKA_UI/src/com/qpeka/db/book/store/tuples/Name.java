@@ -1,7 +1,5 @@
 package com.qpeka.db.book.store.tuples;
 
-import org.json.JSONObject;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 

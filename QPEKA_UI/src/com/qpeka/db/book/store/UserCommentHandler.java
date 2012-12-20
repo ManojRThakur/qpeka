@@ -19,7 +19,8 @@ public class UserCommentHandler {
 	
 	private UserCommentHandler()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		db.authenticate("manoj.thakur66@gmail.com", new char[]{'A','v','a','y','a','1','2','3'});
 		comments = db.getCollection("comments");
 		
 		comments.createIndex(new BasicDBObject(UserComments.BOOKID, 1));

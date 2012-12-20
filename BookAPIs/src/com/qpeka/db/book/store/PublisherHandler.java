@@ -21,6 +21,7 @@ public class PublisherHandler {
 	private PublisherHandler()
 	{
 		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db.authenticate("manoj.thakur66@gmail.com", new char[]{'A','v','a','y','a','1','2','3'});
 		publishers = db.getCollection("publishers");
 	}
 	

@@ -51,7 +51,7 @@ public class BookConverterUtils {
 		{
 			paragraphText = paragraphText.trim();
 			
-			if(paragraphText.contains("Chapter"))
+			if(paragraphText.startsWith("---"))
 			{
 				System.out.println("paragraphText=" + paragraphText);
 				isChapterEnd = true;
@@ -279,6 +279,7 @@ public class BookConverterUtils {
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
 		
-		System.out.println(convertDOCToQPEKA("/tmp/converted/", "/home/manoj/Pride and Prejudice.doc", "pnp-"));
+		System.out.println(convertDOCToQPEKA("/tmp/converted/", "/home/manoj/hindi.doc", "pnp-"));
+		
 	}
 }

@@ -18,7 +18,9 @@ public class UserHandler {
 	
 	private UserHandler()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		if(!db.isAuthenticated())
+			db.authenticate("qpeka", new char[]{'q','p','e','k','a'});
 		users = db.getCollection("users");
 	}
 	
@@ -72,5 +74,32 @@ public class UserHandler {
         }
 	}
 	
+	public User getUserByUserName(String userName)
+	{
+		BasicDBObject q = new BasicDBObject();
+		q.put(User.USERNAME, userName);
+		
+		DBCursor cursor = users.find(q);
+		
+        try 
+        {
+            if(cursor.hasNext()) 
+            {
+                BasicDBObject dObj = (BasicDBObject)cursor.next();
+                User user = User.getUserfromDBObject(dObj);
+                return user;
+            }
+            else
+            	return null;
+        } 
+        catch (Exception e)
+        {
+			e.printStackTrace();
+			return null;
+		}
+        finally {
+            cursor.close();
+        }
+	}
 	
 }

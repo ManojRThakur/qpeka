@@ -33,7 +33,9 @@ public class BookHandler {
 
 	private BookHandler()
 	{
-		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db = MongoAccessor.getInstance().getMongo().getDB("bookstore");
+		if(!db.isAuthenticated())
+			db.authenticate("qpeka", new char[]{'q','p','e','k','a'});
 		books = db.getCollection("books");
 		
 		books.createIndex(new BasicDBObject(Book.CATEGORY, 1));
@@ -317,6 +319,33 @@ public class BookHandler {
 
 	}
 	
+	public List<Book> getFirstFiveBooks()
+	{
+		List<Book> listToReturn = new ArrayList<Book>();
+		DBCursor cursor = books.find();
+		int i = 5;
+        try 
+        {
+            while(cursor.hasNext() && i > 0) 
+            {
+                BasicDBObject dObj = (BasicDBObject)cursor.next();
+                Book book = Book.getBookfromDBObject(dObj);
+                listToReturn.add(book);
+                i++;
+            }
+            return listToReturn;
+           
+        } 
+        catch (Exception e)
+        {
+			e.printStackTrace();
+			return null;
+		}
+        finally {
+            cursor.close();
+        }
+
+	}
 	public List<Book> getBooksSpecificCriteriaHierarchy(String criteria)
 	{
 		List<Book> books = new ArrayList<Book>();

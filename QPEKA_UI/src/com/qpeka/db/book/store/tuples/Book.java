@@ -50,6 +50,7 @@ public class Book {
 	public static final String COMMENTS ="comments";
 	public static final String RATINGS ="ratings"; 
 	public static final String DESCRIPTION ="description"; 
+	public static final String DATEOFPUBLICATION ="dateofpublication"; 
 	
 	//meta Keys
 	public static final String SEARCHKEY ="searchKey";
@@ -67,6 +68,7 @@ public class Book {
 	private float avgRating = 0.0f;
 	private JSONObject metaData = new JSONObject();
 	private String description = "";
+	private long dateOfPub = -1;
 
 	public Book()
 	{
@@ -77,7 +79,7 @@ public class Book {
 			String coverPageFile, int edition,
 			com.qpeka.db.book.store.tuples.Constants.CATEGORY category,
 			int numPages, String publisherId, float avgRating,
-			JSONObject metaData, String description) {
+			JSONObject metaData, String description, long dateOfPub) {
 		super();
 		this._id = _id;
 		this.title = title;
@@ -90,9 +92,15 @@ public class Book {
 		this.avgRating = avgRating;
 		this.metaData = metaData;
 		this.description = description;
+		this.dateOfPub = dateOfPub;
 	}
 
-
+	public long getDateOfPub() {
+		return dateOfPub;
+	}
+	public void setDateOfPub(long dateOfPub) {
+		this.dateOfPub = dateOfPub;
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -195,6 +203,7 @@ public class Book {
 		dbObj.put(PUBLISHERID, publisherId);
 		dbObj.put(RATING, avgRating);
 		dbObj.put(DESCRIPTION, description);
+		dbObj.put(DATEOFPUBLICATION, dateOfPub);
 		dbObj.put(METADATA, metaData.toString());
 		
 		return dbObj;
@@ -204,7 +213,7 @@ public class Book {
 	{
 		try {
 			return new  Book(obj.getString(ID), obj.getString(TITLE), obj.getString(AUTHORID), obj.getString(COVERPAGEFILE), obj.getInt(EDITION), com.qpeka.db.book.store.tuples.Constants.CATEGORY.valueOf(obj.getString(CATEGORY)),
-					obj.getInt(NUMPAGES), obj.getString(PUBLISHERID), (float)obj.getDouble(RATING), new JSONObject(obj.getString(METADATA)), obj.getString(DESCRIPTION));
+					obj.getInt(NUMPAGES), obj.getString(PUBLISHERID), (float)obj.getDouble(RATING), new JSONObject(obj.getString(METADATA)), obj.getString(DESCRIPTION),obj.getLong(DATEOFPUBLICATION));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

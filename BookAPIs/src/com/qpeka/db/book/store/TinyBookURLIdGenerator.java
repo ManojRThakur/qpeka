@@ -21,6 +21,7 @@ public class TinyBookURLIdGenerator {
 	private TinyBookURLIdGenerator()
 	{
 		db = MongoAccessor.getInstance().getMongo().getDB("bookStore");
+		db.authenticate("manoj.thakur66@gmail.com", new char[]{'A','v','a','y','a','1','2','3'});
 		mapping = db.getCollection("tinyUrlMapping");
 	}
 	

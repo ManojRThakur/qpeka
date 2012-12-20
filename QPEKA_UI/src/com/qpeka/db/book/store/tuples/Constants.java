@@ -16,13 +16,23 @@ public class Constants {
 		Situational , CurrentAffairs , Shayari , Songs , Ghazals 
 	}
 	
-	public enum USERTYPE
+	public enum USERLEVEL
 	{
 		PREMIUM , FREE
+	}
+	
+	public enum USERTYPE
+	{
+		AUTHOR, READER
 	}
 	
 	public enum AUTHORTYPE
 	{
 		LEVEL1 , LEVEL2, LEVEL3
+	}
+	
+	public enum LANGUAGES
+	{
+		Assamese , Bengali , Bodo , Dogri , Gujarati , Hindi , Kannada , Kashmiri , Konkani , Maithili , Malayalam , Manipuri , Marathi , Nepali , Oriya , Punjabi , Sanskrit , Santhali , Sindhi , Tamil , Telugu , Urdu , English
 	}
 }

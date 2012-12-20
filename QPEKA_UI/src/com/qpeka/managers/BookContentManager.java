@@ -170,13 +170,13 @@ public class BookContentManager {
 		return UserRatingHandler.getInstance().getRatingGivenBook(bookId);
 	}
 	
-	public String addBook(String title , String authorId , String publisherId , String coverPageFile, int edition , float rating, String metadata, String category, int numPages, String description)
+	public String addBook(String title , String authorId , String publisherId , String coverPageFile, int edition , float rating, String metadata, String category, int numPages, String description, long dop)
 	{
 		try
 		{
 			JSONObject metaData = new JSONObject(metadata);
 			CATEGORY cat = CATEGORY.valueOf(category);
-			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description);
+			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description,dop);
 			
 			String id =   BookHandler.getInstance().addBook(b);
 			boolean success = TinyBookURLIdGenerator.getInstance().addMapping(BookTinyURLIDGenerator.generateBookTinyURLId(),id);
@@ -193,7 +193,7 @@ public class BookContentManager {
 	}
 	
 	public String addBook(String title , String publisherId , String coverPageFile, int edition , float rating, String metadata, String category, int numPages, String description,
-			JSONObject authorDetails)
+			JSONObject authorDetails,long dop)
 	{
 		try
 		{
@@ -206,7 +206,7 @@ public class BookContentManager {
 			
 			String authorId = AuthorHandler.getInstance().addAuthor(a);
 			
-			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description);
+			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description,dop);
 			
 			String id =   BookHandler.getInstance().addBook(b);
 			boolean success = TinyBookURLIdGenerator.getInstance().addMapping(BookTinyURLIDGenerator.generateBookTinyURLId(),id);
@@ -223,7 +223,7 @@ public class BookContentManager {
 	}
 	
 	public String addBook(String title , JSONObject publisherDetails , String coverPageFile, int edition , float rating, String metadata, String category, int numPages, String description,
-			JSONObject authorDetails)
+			JSONObject authorDetails, long dop)
 	{
 		try
 		{
@@ -244,7 +244,7 @@ public class BookContentManager {
 			
 			String publisherId = PublisherHandler.getInstance().addPublisher(pub);
 			
-			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description);
+			Book b = new Book("", title, authorId, coverPageFile, edition, cat , numPages, publisherId, rating, metaData, description, dop);
 			
 			String id =   BookHandler.getInstance().addBook(b);
 			boolean success = TinyBookURLIdGenerator.getInstance().addMapping(BookTinyURLIDGenerator.generateBookTinyURLId(),id);

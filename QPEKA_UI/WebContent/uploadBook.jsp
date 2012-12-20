@@ -37,6 +37,10 @@
 					<td><textarea type="text" rows="10" cols="50" name="description" value=""></textarea></td>
 				</tr>
 				<tr>
+					<td>Date of Publication:</td>
+					<td>Day : <input type="text" name="pday"></input> &nbsp;&nbsp; Month : <input type="text" name="pmonth"></input> Year : <input type="text" name="pyear"></input></td>
+				</tr>
+				<tr>
 					<td>Edition:</td>
 					<td><input type="text" name="edition" value=""></input></td>
 				</tr>

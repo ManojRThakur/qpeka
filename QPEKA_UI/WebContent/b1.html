@@ -1,56 +1,81 @@
-<!doctype html>
-<html>
-<head>
 <meta charset="utf-8">
-<title>Qpeka</title>
+<title>Untitled Document</title>
 <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+<div class="main-container">
 	<div class="pagewrap">
         <div class="header">
-   	     <img src="images/logo.png" width="289" height="104"> 
+        	<div class="logo">
+   		    <img src="images/logo.png" width="207" height="104"> 
+            </div>
+            <div class="social-media"> </div>
         <div id="login">
-        	<span><a href="#">About Us</a>|<a href="#">Contact Us</a>|<a href="#">Logged in As</a></span><br/>
-            <br/>
-            <span id="head-search"><label id="h-search">Search</label><input type="text"/></span>
+       	  	<span>
+          	<a href="#" style="margin:0 0 0 20px !important;"><img src="images/fc.png" width="20" height="20"></a> 
+            <a href="#" ><img src="images/tw.png" width="20" height="20"></a>
+            <a href="#">About Us</a>|
+            <a href="#">Contact Us</a>|<a href="#">Logged in As</a>
+			</span>
         </div>
-        <ul id="main-menu">
+        <ul id="main-menu">        
         	<li><a href="#">Home</a></li>
             <li><a href="#">Books</a></li>
             <li><a href="#">Short Stories</a></li>
             <li><a href="#">Poetry/Articles</a></li>
             <li><a href="#">Blogs</a></li>
-            <li><a href="#">Request/subscribe</a></li>
+            <li><a href="#">Request</a></li>
+            <li>Search <input type="text"/></li>
         </ul><!--main-menu-->
         </div><!--header-->
         <div class="main-container">
         	<div class="lft-cont">
             	<div class="abt-authr">
-           	    <img src="images/auther.jpg" width="199" height="218" alt="auther">
+                <div class="authorPhoto">
+                    <img src="images/authorPhoto.jpg" alt="auther">
+                   
+                </div>
+               <div class="my_acnt_info">
                 <p>Name</p>
-                <p>Writer Level</p>
-                <p>Reader Level</p>
+                    <p>Writer Level</p>
+                    <p>Reader Level</p>
+                    </div>
+                      <div class="my_acnt_info">
                 <p>My Account and Stats</p>
                 <p>My blogs</p>
                 <p>My reads</p>
                 <p>My Friends</p>
                 <p>Upload Works</p>
                 <p>Fans of your works</p>
+                </div>
+                <div class="fans">
                 <p>Fan 1</p>
                 <p>Fan 2</p>
                 <p>Fan 3</p>
                 <p>Fan 4</p>
                 <p>Fan 5</p>
                 <p>More…</p>
+                </div><!--fans-->
                 </div>
           </div><!--lft-cont-->
             <div class="mdle-cont">
+            	  <ul class="mdl-nav">
+                	<li><a href="#">BOOKS</a></li>
+                    <li><a href="#">SHORT STORIES</a></li>
+                    <li><a href="#">POETRY / ARTICLES</a></li>
+              </ul>
         		<div id="edt-prfle">
-                	<h3>Edit Profile</h3>
+                	
                     <form id="ed-prfle">
+                   
                     <table id="ed-pf">
                     	<tbody>
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td> <h3>Edit Profile</h3></td>
+                          <td>&nbsp;</td>
+                        </tr>
                         <tr>
                         	<td width="105"><label>First Name</label></td>
                             <td width="142"><input type="text"></td>
@@ -135,11 +160,15 @@
               
            
           </div><!--mdle-cont-->
-            <div class="rght-cont">
+            <div class="rght-cont border-left">
+            <div class="ad">
            	  <p>Our Recommendations</p>
               <img src="images/boo3.jpg" width="200" height="151">
+              </div>
+              <div class="ad">
 			  <p>New Entry</p>
               <img src="images/boo3.jpg" width="200" height="151">
+              </div>
               <div class="blog">
               	<h4>Blogs and News</h4>
                 <p>Blog 1</p>
@@ -152,10 +181,14 @@
               </div>
               
               </div><!--rght-cont-->
-        </div><!--main-container-->
+        </div><!--middle-container-->
        <div id="footer">
-       <span><a href="#">BECOME A SELF PUBLISH WRITER FOR FREE</a></span>
+       		<span><a href="#">BECOME A SELF PUBLISH WRITER FOR FREE</a></span>
+            <span class="copyright">
+            	Copyright @ 2012. QPEKA & ME meeting simplified. All rights reserved.
+			</span>
        </div><!--footer-->
     </div><!--pagewrap-->
+    </div><!--main-container-->
 </body>
 </html>
