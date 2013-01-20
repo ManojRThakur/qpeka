@@ -1,5 +1,5 @@
-<%@page import="com.qpeka.db.book.store.BookHandler"%>
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.db.book.store.WorksHandler"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.util.List"%>
 <%@page import="com.qpeka.utils.SystemConfigHandler"%>
 <%@page import="com.qpeka.db.book.store.tuples.User"%>
@@ -36,7 +36,7 @@
 <meta property="fb:admins" content="100000416610498" />
 <title>QPEKA</title>
 <%
-boolean loggedIn = true;
+	boolean loggedIn = true;
 String uid = (String)request.getSession().getAttribute("uid");
 String uname = (String)request.getSession().getAttribute("uname");
 User u = null;
@@ -51,7 +51,7 @@ if(!loggedIn)
 	return;
 }
 
-List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
+List<Work> l = WorksHandler.getInstance().getFirstFiveBooks();
 %>
 </head>
 <body>
@@ -77,8 +77,14 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
           	<a href="#" style="margin:0 0 0 20px !important;"><img src="images/fc.png" width="20" height="20"></a> 
             <a href="#" ><img src="images/tw.png" width="20" height="20"></a>
             <a href="<%=request.getContextPath()%>/aboutUs.jsp">About Us</a>|
-            <a href="#">Contact Us</a>|<%if(loggedIn) {%>
-            <a href="#">Logged in As <%=uname%></a>|<a href="<%=request.getContextPath()%>/register?rType=logout">Log out</a><%} else {%><a href="#">Login</a><%}%>
+            <a href="#">Contact Us</a>|<%
+            	if(loggedIn) {
+            %>
+            <a href="#">Logged in As <%=uname%></a>|<a href="<%=request.getContextPath()%>/register?rType=logout">Log out</a><%
+            	} else {
+            %><a href="#">Login</a><%
+            	}
+            %>
             </span>
         </div>
         
@@ -99,15 +105,23 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
            	    	<img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?method=userPhoto&user=<%=u.get_id()%>">
                 </div>
                 <p><%=u.getName().getFirstName()%> <%=u.getName().getMiddleName()%> <%=u.getName().getLastName()%></p>
-                <%if(u.isWriter()){%>
+                <%
+                	if(u.isWriter()){
+                %>
                 <p>Writer Level</p>
-                <%}%>
+                <%
+                	}
+                %>
                 <p>Reader Level</p>
                 <p><a href="#">My Account</a></p> <!--   account details page -->
                	<p><a href="#">My Reads</a></p> <!-- reading info page bookmarks and rating etc -->
                 <p>My Blogs</p>
-                <%if(u.isWriter()){%>
-                 <%}%>
+                <%
+                	if(u.isWriter()){
+                %>
+                 <%
+                 	}
+                 %>
                	<p>Upload Works</p>
                 </div>
                 
@@ -118,8 +132,10 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
 			<div id="newRead"  style="text-align:center;">
 				<p class="title">New Reads</p>
 				<ul id="gal">
-					<%for(Book b : l){ %>
-						<li><a target="_blank" href="http://qpeka-qpeka.rhcloud.com/QPEKA/bookViewer.jsp?book=<%=b.get_id()%>&pageNo=0"><img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=b.get_id()%>" width="83" height="133"></a></li>
+					<%
+						for(Work b : l){
+					%>
+						<li><a onmouseover="popup(<%=b.getTitle()%>)" target="_blank" href="http://qpeka-qpeka.rhcloud.com/QPEKA/bookViewer.jsp?book=<%=b.get_id()%>&pageNo=0"><img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=b.get_id()%>" width="83" height="133"></a></li>
 					<%}%>
 				</ul>
 				<br/><br/>
@@ -133,7 +149,7 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
               <p>Book Of the Day</p>
               </div>
               <div class="ad">
-              <img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=l.get(1).get_id()%>" width="205" height="267">
+              <img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=l.get(0).get_id()%>" width="205" height="267">
               <p>Most Read </p>
               </div>
               </div><!--rght-cont-->

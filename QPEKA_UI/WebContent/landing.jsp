@@ -1,6 +1,6 @@
 <%@page import="com.qpeka.utils.SystemConfigHandler"%>
-<%@page import="com.qpeka.db.book.store.BookHandler"%>
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.db.book.store.WorksHandler"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -36,7 +36,7 @@
 </head>
 
 <%
-String uid = (String)request.getSession().getAttribute("uid");
+	String uid = (String)request.getSession().getAttribute("uid");
 String uname = (String)request.getSession().getAttribute("uname");
 boolean loggedIn = true;
 if(uid == null || uname == null)
@@ -48,7 +48,7 @@ if(loggedIn)
 	return;
 }
 
-List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
+List<Work> l = WorksHandler.getInstance().getFirstFiveBooks();
 %>
 <body>
 <!-- FB Like -->
@@ -106,8 +106,10 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
 			<div id="newRead"  style="text-align:center;">
 				<p class="title">Books</p>
 				<ul id="gal">
-					<%for(Book b : l){ %>
-						<li><a href="#"><img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=b.get_id()%>" width="83" height="133"></a></li>
+					<%
+						for(Work b : l){
+					%>
+						<li><a onmouseover="popup(<%=b.getTitle()%>)" onclick="javascript:alert('You need to login to read this book.');" href="#"><img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=b.get_id()%>" width="83" height="133"></a></li>
 					<%}%>
 				</ul>
 				<br/><br/>
@@ -118,7 +120,7 @@ List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
           </div><!--mdle-cont-->
             <div class="rght-cont">
            	<div class="ad">
-              <img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=l.get(1).get_id()%>" width="187" height="265">
+              <img src="<%=SystemConfigHandler.getInstance().getImageServerURL()%>?book=<%=l.get(0).get_id()%>" width="187" height="265">
               <p>Book Of the Day</p>
               </div>
               <div class="ad">

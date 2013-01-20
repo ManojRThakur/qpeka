@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="com.qpeka.db.book.store.BookHandler"%>
-<%@page import="com.qpeka.managers.BookContentManager"%>
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.db.book.store.WorksHandler"%>
+<%@page import="com.qpeka.managers.WorkContentManager"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.File"%>
 <%@page import="org.json.JSONObject"%>
@@ -34,7 +34,7 @@ width:expression(Math.min(this.offsetWidth, maxwidth)+'px');
 ***********************************************/
 </script>
 <%
-List<Book> list = BookHandler.getInstance().getAllBooks();
+	List<Work> list = WorksHandler.getInstance().getAllBooks();
 %>
 <!-- Google Analytics -->
 <script type="text/javascript">
@@ -59,9 +59,9 @@ List<Book> list = BookHandler.getInstance().getAllBooks();
     	<br><br>
     	<h2>Available Books</h2> <br><br><br>
     	<%
-    	int i = 1;
-    	for(Book b : list)
-    	{
+    		int i = 1;
+    	    	for(Work b : list)
+    	    	{
     	%>
     	<h3><%=i++%>. &nbsp;<a href="http://qpeka-qpeka.rhcloud.com/QPEKA/bookViewer.jsp?book=<%=b.get_id()%>&pageNo=0"><%=b.getTitle() %></h3></a> <br>
     	<%} %>

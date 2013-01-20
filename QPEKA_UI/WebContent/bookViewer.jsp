@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.qpeka.utils.SystemConfigHandler"%>
-<%@page import="com.qpeka.managers.BookContentManager"%>
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.managers.WorkContentManager"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.File"%>
 <%@page import="org.json.JSONObject"%>
@@ -38,17 +38,15 @@ width:expression(Math.min(this.offsetWidth, maxwidth)+'px');
 * Modified by Jscheuer1 for autowidth and optional starting positions
 ***********************************************/
 </script>
-<%!
-String dir = "";
+<%!String dir = "";
 String filePrefix = "";
 int pageNo = 0;
 int numPagesPerFile = 100;
-int totalPages = 0;
-%>
+int totalPages = 0;%>
 <%
-String done = request.getParameter("done");
+	String done = request.getParameter("done");
 String bookId = request.getParameter("book");
-Book bk = BookContentManager.getInstance().getBookDetails(bookId);
+Work bk = WorkContentManager.getInstance().getBookDetails(bookId);
 pageNo = Integer.parseInt(request.getParameter("pageNo"));
 totalPages = bk.getNumPages();
 //dir = request.getParameter("fileDir");

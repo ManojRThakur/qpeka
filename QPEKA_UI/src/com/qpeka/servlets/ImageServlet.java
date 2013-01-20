@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qpeka.db.book.store.tuples.Book;
-import com.qpeka.managers.BookContentManager;
+import com.qpeka.db.book.store.tuples.Work;
+import com.qpeka.managers.WorkContentManager;
 
 /**
  * Servlet implementation class ImageServlet
@@ -52,12 +52,14 @@ public class ImageServlet extends HttpServlet {
 			OutputStream out = null;
 			try
 			{
-				Book bk = BookContentManager.getInstance().getBookDetails(bookId);
+				Work bk = WorkContentManager.getInstance().getBookDetails(bookId);
 				
 				File f = new File(bk.getCoverPageFile());
+				System.out.println("[FILE] value=" + f.getAbsolutePath());
 				BufferedImage bi = ImageIO.read(f);
 				out = response.getOutputStream();
 				ImageIO.write(bi, "jpg", out);
+				
 				
 			}
 			catch (Exception e) {

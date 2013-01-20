@@ -74,7 +74,7 @@ public class BookConverterUtils {
 					pageSize++;
 				}
 				
-				if(pageSize > 150 || lines >= 12 || isChapterEnd)
+				if(pageSize > 150 || lines >= 12 || isChapterEnd) //
 				{
 					pageSize = 0; 
 					lines = 0;

@@ -24,7 +24,7 @@ import com.qpeka.book.converter.BookConverterUtils;
 import com.qpeka.db.book.store.tuples.Constants.AUTHORTYPE;
 import com.qpeka.db.book.store.tuples.Constants.CATEGORY;
 import com.qpeka.db.book.store.tuples.Constants.GENDER;
-import com.qpeka.managers.BookContentManager;
+import com.qpeka.managers.WorkContentManager;
 import com.qpeka.utils.SystemConfigHandler;
 
 /**
@@ -197,7 +197,7 @@ public class UploadHandlerServlet extends HttpServlet {
 			else if(fileName.endsWith(".docx"))
 				BookConverterUtils.convertFromDOCXToQPEKA(SystemConfigHandler.getInstance().getBookContentFolder(), SystemConfigHandler.getInstance().getSrcBookFolder()+fileName, title);
         	
-        	String id = BookContentManager.getInstance().addBook(title, publisherDetails, SystemConfigHandler.getInstance().getBookCoverPageFolder()+title+".jpg", Integer.parseInt(bookEdition),
+        	String id = WorkContentManager.getInstance().addBook(title, publisherDetails, SystemConfigHandler.getInstance().getBookCoverPageFolder()+title+".jpg", Integer.parseInt(bookEdition),
         			3.5f, "", bookCategory.name(), numPages, bookDesc, authorDetails,getDate(pmonth,pyear,pday));
 			
 			response.sendRedirect(request.getContextPath()+"/bookViewer.jsp?pageNo=0&book="+id);

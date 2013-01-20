@@ -1,5 +1,5 @@
-<%@page import="com.qpeka.db.book.store.BookHandler"%>
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.db.book.store.WorksHandler"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -98,7 +98,7 @@ function validateForm()
 <!-- Google Analytics -->
 </head>
 <%
-String uid = (String)request.getSession().getAttribute("uid");
+	String uid = (String)request.getSession().getAttribute("uid");
 String uname = (String)request.getSession().getAttribute("uname");
 boolean loggedIn = true;
 if(uid == null || uname == null)
@@ -110,7 +110,7 @@ if(loggedIn)
 	return;
 }
 
-List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
+List<Work> l = WorksHandler.getInstance().getFirstFiveBooks();
 %>
 <body>
 <div class="main-container">

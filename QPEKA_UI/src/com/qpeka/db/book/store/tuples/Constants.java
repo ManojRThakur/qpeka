@@ -31,6 +31,11 @@ public class Constants {
 		LEVEL1 , LEVEL2, LEVEL3
 	}
 	
+	public enum TYPE
+	{
+		BOOK , SHORTSTORY, POEM
+	}
+	
 	public enum LANGUAGES
 	{
 		Assamese , Bengali , Bodo , Dogri , Gujarati , Hindi , Kannada , Kashmiri , Konkani , Maithili , Malayalam , Manipuri , Marathi , Nepali , Oriya , Punjabi , Sanskrit , Santhali , Sindhi , Tamil , Telugu , Urdu , English

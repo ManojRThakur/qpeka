@@ -15,7 +15,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import com.qpeka.db.book.store.MongoAccessor;
-import com.qpeka.db.book.store.tuples.Book;
+import com.qpeka.db.book.store.tuples.Work;
 
 public class AuthHandler {
 

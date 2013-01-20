@@ -1,6 +1,6 @@
-<%@page import="com.qpeka.db.book.store.tuples.Book"%>
+<%@page import="com.qpeka.db.book.store.tuples.Work"%>
 <%@page import="java.util.List"%>
-<%@page import="com.qpeka.db.book.store.BookHandler"%>
+<%@page import="com.qpeka.db.book.store.WorksHandler"%>
 <%@page import="com.qpeka.db.book.store.UserHandler"%>
 <%@page import="com.qpeka.db.book.store.tuples.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -30,7 +30,7 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <%
-boolean loggedIn = true;
+	boolean loggedIn = true;
 String uid = (String)request.getSession().getAttribute("uid");
 String uname = (String)request.getSession().getAttribute("uname");
 User u = null;
@@ -39,7 +39,7 @@ if(uid == null || uname == null)
 else
 	u = UserHandler.getInstance().getUser(uid);
 
-List<Book> l = BookHandler.getInstance().getFirstFiveBooks();
+List<Work> l = WorksHandler.getInstance().getFirstFiveBooks();
 %>
 <body>
 <div class="main-container">
